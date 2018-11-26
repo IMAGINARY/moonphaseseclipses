@@ -1,0 +1,3207 @@
+<!DOCTYPE html>
+<!-- @author: Dorotea Dudas	@date 20/02/18 -->
+<html lang="en">
+	<head>
+		<title>Eclipse, Moon Phases</title>
+		<meta charset="utf-8"><meta name="author" content="Dorotea Dudas"><meta name="date" content="20-02-2018"> <!--scheme="DD-MM-YYYY"-->
+		<style>
+			* {
+				font-family: "HelveticaNeueLT Com 55 Roman", "Helvetica Neue LT Com", Verdana, Arial, sans-serif;
+			}		
+			body, html {
+				margin				: 0px;
+				background-color		: #000000;
+				overflow			: hidden;
+				
+				/* disable text selection */
+				-webkit-user-select		: none;
+				-moz-user-select		: -moz-none;
+				-ms-user-select			: none;
+				user-select			: none;	
+				-webkit-touch-callout		: none;
+				-khtml-user-select		: none;
+				
+				visibility			:hidden;
+			}
+			input {
+				/* disable text selection */
+				-webkit-user-select		: none;
+				-moz-user-select		: -moz-none;
+				-ms-user-select			: none;
+				user-select			: none;	
+				-webkit-touch-callout		: none;
+				-khtml-user-select		: none;	
+			}
+			img {
+				-webkit-user-drag		: none;
+			}
+			#container {
+			}	
+			
+			.gui_overlord_text {
+				position	: relative;
+				left		: 16px; 
+				top		: 0px;
+				z-index		: 2;
+				font-size	: 150%;
+				color		: #BDBDBD;
+				background	: rgba(128,128,128,0.0);
+				padding		: 5px;
+				padding-top	: 5px;
+				padding-bottom	: 5px;
+				padding-left	: 188px;
+				width		: 134px;
+				border-radius	: 0px;
+				border-color	: black;
+				border-style	: solid;
+				border-width	: 0px;
+				text-align	: left;
+			}
+			.gui_overlord_slider {
+				width		: 150px;
+				z-index		:2;
+				opacity		:0.9;
+				position	:relative; 
+				top		:-22px;
+				left		:32px;
+			}
+			.gui_overlord_radio {
+				position	: relative;
+				left		: 3px;
+				top		: 0px;
+				z-index		: 2;
+				font-size	: 100%;
+				width		: 401px;
+				color		: #BDBDBD;
+				background	: rgba(128,128,128,0.0);
+				padding-bottom	: 6px;
+				padding-top	: 6px;
+				padding-left	: 28px; 
+				text-align	: left;
+				text-vertical-align: bottom;
+			}
+			.gui_overlord_radio .ui-button {
+				background-color: rgba(128,128,128,0.7);
+				color		: #ffffff;
+				border-width	: 0px; 
+			}			
+			.gui_overlord_radio .ui-button.ui-state-active {
+				background-color: rgba(0,119,190,1.0);
+				color		: #ffffff;
+				border-width	: 0px; 
+			}
+			
+			#sliderEarthPosition {/*earth position*/
+				background:rgba(0,0,0,0);
+			}
+			#sliderEarthVelocity {/*earth velocity*/
+				background:rgba(0,0,0,0);
+			}			
+			#sliderEarthAxialTilt {
+				background:rgba(0,0,0,0);
+			}			
+			#sliderEarthEigen {/*earth eigen axis rotation velocity*/
+				background:rgba(0,0,0,0);
+			}			
+			
+			#sliderOrbitOpacity {/*orbit opacity*/
+				background:rgba(0,0,0,0);
+			}			
+			
+			#sliderMoonPosition {/*moon position*/
+				background:rgba(0,0,0,0);
+			}			
+			#sliderMoonVelocity {
+				background:rgba(0,0,0,0);
+			}			
+			#sliderMoonOrbitInclination {
+				background:rgba(0,0,0,0);
+			}			
+			#sliderMoonEarthDistance {
+				background:rgba(0,0,0,0);
+			}			
+			#sliderMoonEigen {/*moon eigen axis rotation position*/
+				background:rgba(0,0,0,0);
+			}			
+			#sliderMoonEigen2 {/*moon eigen axis rotation velocity*/
+				background:rgba(0,0,0,0);
+			}			
+			
+			#radioOrbitEarth {
+			}	
+			#radioOrbitMoon {
+			}	
+			#radioHeat {
+			}	
+			#radioTime {/* not used */
+			}	
+			#radioLabels {/* season labels */
+			}	
+			#radioLocation {/* season hemisphere */
+				bottom		: 14px;
+				left		: 26px;	
+				width		: 420px;
+				position	: absolute;
+				z-index		: 2;
+				font-size	: 74%;
+				color		: #BDBDBD;
+				background	: rgba(128,128,128,0.0);
+				padding		: 5px;
+				padding-top	: 5px;
+				padding-bottom	: 5px;
+				border-radius	: 0px;
+				border-width	: 0px;		
+				text-align	: left;							
+			}	
+			#radioLocation .ui-button {
+				background-color: rgba(128,128,128,0.7);
+				color		: #ffffff;
+				border-width	: 0px; 				
+			}
+			#radioLocation .ui-button.ui-state-active {
+				background-color: rgba(0,119,190,1.0);
+				color		: #ffffff;
+				border-width	: 0px; 				
+			}			
+			#radioEarthAxialTilt {/* not existing */
+			}	
+			
+			#radio {/*small camera view*/
+				position	: absolute;
+				top		: 43%;
+				left		: -113px;
+				z-index		: 2;
+				font-size	: 70%;
+				width		: 575px;
+				color		: #BDBDBD;
+				background	: rgba(128,128,128,0.0);
+				padding		: 5px;
+				padding-top	: 5px;
+				padding-bottom	: 5px;
+				border-radius	: 0px;
+				border-color	: black;
+				border-style	: solid;
+				border-width	: 0px;
+				text-align	: center;
+			}	
+			#radio .ui-button.ui-state-active {
+				background-color: rgba(128,128,256,0.3);
+			}
+			#radio .ui-button {
+				background-color: rgba(128,128,128,0.0);
+				border-color	: rgba(128,128,128,0.0);
+			}
+			
+			#radioViewCenter {
+				position	: absolute;
+				bottom		: 11px;
+				left		: 35%;
+				z-index		: 2;
+				font-size	: 70%;
+				width		: 452px;
+				color		: #BDBDBD;
+				background	: rgba(128,128,128,0.0);
+				padding		: 5px;
+				padding-top	: 5px;
+				padding-bottom	: 5px;
+				border-radius	: 0px;
+				border-color	: black;
+				border-style	: solid;
+				border-width	: 0px;
+				text-align	: center;
+			}	
+			#radioViewCenter .ui-button.ui-state-active {
+				background-color: rgba(128,128,256,0.3);
+			}			
+			#radioViewCenter .ui-button {
+				background-color: rgba(128,128,128,0.0);
+				border-color	: rgba(128,128,128,0.0);
+			}
+			
+			#radioPresets {/*presets*/
+				position	: absolute;
+				bottom		: -24px;
+				right		: -110px;
+				z-index		: 2;
+				font-size	: 70%;
+				width		: 425px;
+				color		: #BDBDBD;
+				background	: rgba(128,128,128,0.0);
+				padding		: 5px;
+				padding-top	: 5px;
+				padding-bottom	: 5px;
+				border-radius	: 0px;
+				border-color	: black;
+				border-style	: solid;
+				border-width	: 0px;
+				text-align	: center;
+			}	
+			#radioPresets .ui-button.ui-state-active {
+				background-color: rgba(128,128,256,0.3);
+			}
+			#radioPresets .ui-button {
+				background-color: rgba(128,128,128,0.0);
+				border-color	: rgba(128,128,128,0.0);
+			}
+			
+			
+			/*circular div*/
+			.circleVarious {
+				bottom		: 140px;	
+				left		: 18px;
+				width		: 340px;
+				height		: 440px;
+				position	: absolute;
+				z-index		: 2;/*75;*/
+				color		: #BDBDBD;
+				background	: rgba(128,128,128,0.6);
+				border		: 2px solid rgba(0,119,190,1.0);
+				font-size	: 75%;
+			}
+			.circleEarth {/*Earth*/
+				right 		: 18px;
+				bottom		: 478px;
+				width		: 358px;
+				height		: 225px;
+				position	: absolute;
+				z-index		: 2;/*75;*/
+				font-size	: 75%;
+				color		: #BDBDBD;
+				background	: rgba(128,128,128,0.6);
+				border		: 2px solid rgba(0,119,190,1.0);
+			}
+			.circleMoon {
+				bottom		: 140px;
+				right		: 18px;
+				width		: 358px;
+				height		: 320px;
+				position	: absolute;
+				z-index		: 2;/*100;*/
+				font-size	: 75%;
+				color		: #BDBDBD;
+				background	: rgba(128,128,128,0.6);
+				border		: 2px solid rgba(0,119,190,1.0);
+			}
+			
+			/*standard buttons*/
+			/*vertical alignment of the image within a div*/
+			.helper {
+				display: inline-block;
+				height: 100%;
+				vertical-align: middle;
+			}			
+			
+			/*dialog*/
+			.dlg-no-title .ui-dialog-titlebar {/*(.dlg-no-title dialog class; .ui-dialog-titlebar not used)*/
+				display: none;
+			}			
+			.ui-widget-content.ui-dialog {
+				background	: rgba(128,128,128,0.0) !important;
+				border		: 2px solid rgba(128,128,128,0.0);
+				/*place the dialog on the top of all buttons*/
+				position	: relative;
+				z-index		: 10;				
+ 			} 
+			#dialogHelp {
+				position	: relative;
+				z-index		: 3;
+				font-size	: 150%;
+				color		: #BDBDBD;
+				background	: rgba(128,128,128,0.6);
+			}
+			
+			/* images as slider handles */
+			#sliderEarthPosition .ui-slider-handle,#sliderEarthVelocity .ui-slider-handle,#sliderMoonPosition .ui-slider-handle,#sliderMoonVelocity .ui-slider-handle,#sliderMoonOrbitInclination .ui-slider-handle,#sliderMoonEarthDistance .ui-slider-handle, 
+			#sliderOrbitOpacity .ui-slider-handle, #sliderEarthEigen .ui-slider-handle, #sliderEarthAxialTilt .ui-slider-handle, #sliderMoonEigen .ui-slider-handle, #sliderMoonEigen2 .ui-slider-handle
+			{
+				width		: 40px;
+				height		: 40px;
+				background	: url(Images/Icons/icon_blue_slider.svg) no-repeat !important;
+				background-size	: 40px 40px !important; 
+				border		: none;
+				outline		: none;/* no border on focus*/
+				margin-top	: -10px;
+				margin-left	: -20px;	
+			}
+			
+			/* zoom */
+			#radioViewCenter, #radio, #radioPresets {/*GUI scale*/ /*, #resetButton*/
+				transform: scale(0.75);
+			}
+			/* make sure that the elements end up in the correct corrners*/
+			#radioViewCenter {/* lower radio buttons */
+				transform-origin: 100% 100%;							
+			}					
+			#radio {/* upper right radio buttons */
+				transform-origin: 100% 0%;							
+			}				
+			#radioPresets {/* upper left radio buttons */
+				transform-origin:  0% 0%;
+			}		
+			.circleVarious {/* moon, earth together with input elements  (.circle1 .circleMoon .circleSeasons) */
+				transform-origin: 0% 100%;
+				transform: scale(0.75);/* destroys (offsets) jquery slider sliding position */
+			}
+			.circleEarth {/* earth circle has to be additionaly repositioned*/
+				transform-origin: -120% 100%;
+			}
+		</style>
+		<link  href="scripts/jquery-ui.css" rel="stylesheet">
+		<script src="scripts/jquery-1.9.1.js"></script>
+		<script src="scripts/jquery-ui.js"></script>	
+	</head>
+	<body>
+		<div class="circleEarth" id="circleEarth"><!-- Earth Menu -->
+			<br>
+			&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<img src="Images/Icons/icon_earth.png" width=45 style="vertical-align:middle"></img>
+			&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<font id="TextEarth" style="font-size: 200%; vertical-align:middle"></font>
+
+			<br><br>
+			<!--Earth Position-->
+			<input type="text" id="amountEarthPosition" class="gui_overlord_text" readonly ></input>
+			<div id="sliderEarthPosition" class="gui_overlord_slider"></div>
+			
+			<!--Earth Velocity-->
+			<input type="text" id="amountEarthVelocity" class="gui_overlord_text" readonly >
+			<div id="sliderEarthVelocity" class="gui_overlord_slider"></div>
+
+			<!--Earth Orbit-->
+			<div id="radioOrbitEarth" class="gui_overlord_radio">
+			<input type="radio" id="radio5a" name="radio5options" checked="checked"><label id="TextEarthOrbitA" for="radio5a"></label>
+			<input type="radio" id="radio5b" name="radio5options"><label id="TextEarthOrbitB" for="radio5b"></label>
+			<font id="TextEarthOrbit" style="font-size	: 150%;vertical-align:bottom;">
+			</font>
+			</div>
+		</div>
+		<div class="circleMoon" id="circleMoon"><!-- Moon Menu -->
+			<br>
+			&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<img src="Images/Icons/icon_moon.png" width=45 style="vertical-align:middle"></img>
+			&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<font id="TextMoon" style="font-size: 200%; vertical-align:middle"></font>
+		
+			<br><br>
+			<!--Moon Position-->
+			<input type="text" id="amountMoonPosition" class="gui_overlord_text" readonly >
+			<div id="sliderMoonPosition" class="gui_overlord_slider"></div> 
+			
+			<!--Moon Velocity-->
+			<input type="text" id="amountMoonVelocity" class="gui_overlord_text" readonly >
+			<div id="sliderMoonVelocity" class="gui_overlord_slider"></div>
+			
+			<!-- Moon orbit -->
+			<div id="radioOrbitMoon" class="gui_overlord_radio">
+			<input type="radio" id="radio6a" name="radio6options" checked="checked"><label id="TextMoonOrbitA" for="radio6a"></label>
+			<input type="radio" id="radio6b" name="radio6options"><label id="TextMoonOrbitB" for="radio6b"></label>
+			<font id="TextMoonOrbit" style="font-size: 150%;vertical-align:bottom">
+			</font>
+			</div>
+			
+			<br><!--Moon Orbit Inclination-->
+			<input type="text" id="amountMoonOrbitInclination" class="gui_overlord_text" readonly >
+			<div id="sliderMoonOrbitInclination"  class="gui_overlord_slider"></div>	
+			
+			<!--Earth Moon Distance-->
+			<input type="text" id="amountMoonEarthDistance" class="gui_overlord_text" readonly >
+			<div id="sliderMoonEarthDistance" class="gui_overlord_slider"></div>			
+		</div>
+		<div class="circleVarious" id="circleVarious" style="visibility:hidden"><!-- Various Menu - german version not implemented -->
+			<br>
+			&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<img src="Images/Icons/icon_sun_earth_moon.png" height=45 style="vertical-align:middle"></img>
+			&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<font style="font-size: 200%; vertical-align:middle">Various</font>
+
+			<br><br>
+			<!--Moon Eigen Axis Rotation Position--><!-- have to set moonFacesEarth to false, otherwise it is "locked" to the position of the Moon (sliderMoonPosition) -> uncomment "slider handle image color" to see the relationship better -->
+			<input type="text" id="amountMoonEigen" class="gui_overlord_text" readonly >
+			<div id="sliderMoonEigen" class="gui_overlord_slider"></div>	
+
+			<!--Moon Eigen Axis Rotation Velocity--><!-- have to set moonFacesEarth to false, otherwise it is "locked" to the velocity of the Moon -> uncomment "slider handle image color" to see the relationship better -->
+			<input type="text" id="amountMoonEigen2" class="gui_overlord_text" readonly >
+			<div id="sliderMoonEigen2" class="gui_overlord_slider"></div>
+			
+			<!--Orbit Opacity (both Earth and Moon)-->
+			<input type="text" id="amountOrbitOpacity" class="gui_overlord_text" readonly >
+			<div id="sliderOrbitOpacity" class="gui_overlord_slider"></div>	
+			
+			<!--Earth Eigen Axis Rotation Velocity-->
+			<input type="text" id="amountEarthEigen" class="gui_overlord_text" style="font-size:150%" readonly >
+			<div id="sliderEarthEigen" class="gui_overlord_slider"></div>	
+			
+			<!--Earth Axial Tilt-->
+			<input type="text" id="amountEarthAxialTilt" class="gui_overlord_text" readonly >
+			<div id="sliderEarthAxialTilt" class="gui_overlord_slider"></div>
+			
+			<!-- Earth Heat Impact-->
+			<div id="radioHeat" class="gui_overlord_radio">
+			<input type="radio" id="radio2a" name="radio2options"><label id="TextEarthHeatImpactA" for="radio2a"></label>
+			<input type="radio" id="radio2b" name="radio2options" checked="checked"><label id="TextEarthHeatImpactB" for="radio2b"></label>
+			<font id="TextEarthHeatImpact" style="font-size	: 150%;vertical-align:bottom;">
+			</font>			
+			</div>		
+			
+			<!-- Earth Time Zones - no texture provided (uncomment in initEarth(), updateEarth, texture and material definition) -->
+<!--			<div id="radioTime" class="gui_overlord_radio">
+			<input type="radio" id="radio3a" name="radio3options"><label id="TextEarthTimeZonesA" for="radio3a"></label>
+			<input type="radio" id="radio3b" name="radio3options" checked="checked"><label id="TextEarthTimeZonesB" for="radio3b"></label>
+			<font id="TextEarthTimeZones" style="font-size: 150%;vertical-align:bottom;">
+			</font>
+			</div>-->
+			
+			<!-- Earth Season Labels -->
+			<div id="radioLabels" class="gui_overlord_radio">
+			<input type="radio" id="radio4a" name="radio4options"><label id="TextSeasonLabelsA" for="radio4a"></label>
+			<input type="radio" id="radio4b" name="radio4options" checked="checked"><label id="TextSeasonLabelsB" for="radio4b"></label>
+			<font id="TextSeasonLabels" style="font-size	: 150%;vertical-align:bottom;">
+			</font>			
+			</div>	
+			<!-- Earth Seasons Hemisphere (appears if the Season Labels are On)-->
+			<div id="radioLocation"> 
+			<input type="radio" id="radio10a" name="radio10options" checked="checked"><label for="radio10a">&nbsp;<br>&nbsp;&nbsp;&nbsp;N&nbsp;&nbsp;<br>&nbsp;</label> <!--(Nothern Hemisphere)-->
+			<input type="radio" id="radio10b" name="radio10options"><label for="radio10b">&nbsp;<br>&nbsp;&nbsp;S&nbsp;&nbsp;<br>&nbsp;</label><!-- (Southern Hemisphere)-->
+			<font id="TextSeasonHemisphere" style="font-size: 210%;vertical-align:bottom;">
+			</font>	
+			</div>	
+			
+			<!--Earth Axial Tilt - Free or Fixed -> doesn't exist -->
+<!-- 			<div id="radioEarthAxialTilt" class="gui_overlord_radio" >  -->
+<!-- 			<input type="radio" id="radio11a" name="radio11options" checked="checked"><label id="TextEarthAxialTiltA" for="radio11a"></label>  -->
+<!-- 			<input type="radio" id="radio11b" name="radio11options"><label id="TextEarthAxialTiltB" for="radio11b"></label> -->
+<!-- 			<font id="TextEarthAxialTilt" style="font-size	: 150%;vertical-align:bottom;"></font> -->
+<!-- 			</div>			 -->
+		</div>
+		
+		<!--Small Camera-->
+		<div id="radio">
+		<input type="radio" id="radio1" name="radio" checked="checked"><label for="radio1">Moon from Earth</label>		
+		<input type="radio" id="radio4" name="radio"><label for="radio4">Earth from Moon</label>		
+		<input type="radio" id="radio3" name="radio"><label for="radio3">Earth from above Sun</label>
+		<input type="radio" id="radio2" name="radio"><label for="radio2">Earth Side View</label>
+<!-- 		<input type="radio" id="radio5" name="radio"><label for="radio5">Earth to Space</label>		 -->
+<!-- 		<input type="radio" id="radio6" name="radio"><label for="radio6">Earth behind Moon</label> -->
+<!-- 		<input type="radio" id="radio7" name="radio"><label for="radio7">Moon from Earth (non-directed)</label> -->
+		<font style="font-size	: 150%;">&nbsp;
+		</font>
+		</div>
+		<div id="radioViewCenter">
+		<input type="radio" id="radio8a" name="radio8options" checked="checked"><label for="radio8a">Center Sun</label>
+		<input type="radio" id="radio8b" name="radio8options" ><label for="radio8b">Center Earth</label>
+		<input type="radio" id="radio8c" name="radio8options" ><label for="radio8c">Center Moon</label>
+		<font style="font-size	: 150%;">&nbsp;
+		</font>
+		</div>	
+		<div id="radioPresets">
+		<input type="radio" id="radio9a" name="radio9options" checked="checked"><label for="radio9a">Manual Settings</label>
+		<input type="radio" id="radio9b" name="radio9options" ><label for="radio9b">Moon Phases</label>
+		<input type="radio" id="radio9c" name="radio9options" ><label for="radio9c">Total Eclipse</label>
+		<font style="font-size	: 150%;">&nbsp;
+		</font>
+		</div>		
+		
+		<div id="container"></div>
+		
+		
+		<script src="scripts/three68.min.js"></script>
+		<script src="scripts/TrackballControls.js"></script>	
+		
+		<script id="fragmentShaderStar" type="x-shader/x-fragment">
+			varying vec2 vUv;
+			varying float noise;
+			uniform sampler2D texture1;
+			uniform sampler2D texture2;
+			uniform float time;
+ 			//uniform vec2 resolution;
+			varying vec3 vNormal;
+			
+			float random( vec3 scale, float seed ){
+				return fract( sin( dot( gl_FragCoord.xyz + seed, scale ) ) * 43758.5453 + seed ) ;
+			}
+			void main() {
+				float r = .01 * random( vec3( 12.9898, 78.233, 151.7182 ), 0.0 );// get a random offset
+				// lookup vertically in the texture, using noise and offset to get the right RGB colour
+				vec2 tPos = vec2( 0, 1.9 * noise + r );
+				vec4 color = texture2D( texture2, tPos );
+				gl_FragColor = vec4( color.rgb, 1.0 );
+				
+				//lava
+				vec2 position = -1.0 + 2.0 * vUv;
+				vec4 noise2 = texture2D( texture1, vUv );
+				vec2 T1 = vUv + vec2( 1.5, -1.5 ) * time * 0.02;
+				vec2 T2 = vUv + vec2( -0.5, 2.0 ) * time * 0.01;
+				T1.x += noise2.x * 2.0;
+				T1.y += noise2.y * 2.0;
+				T2.x -= noise2.y * 0.2;
+				T2.y += noise2.z * 0.2;
+				float p = texture2D( texture1, T1 * 2.0 ).a;//t1
+				color = texture2D( texture2, T1 * 1.0 );//vec4 //t2 2.0
+
+				gl_FragColor = mix( gl_FragColor, vec4(color.rgb, gl_FragColor.w ), 0.95 );//good, but a bit weird
+			}
+		</script>
+		<script id="vertexShaderStar" type="x-shader/x-vertex">
+			//uniform float amplitude;
+			varying vec3 vNormal;
+			varying float noise;
+			varying vec2 vUv;
+ 			void main() {
+				vUv = uv;
+				vNormal = normalize( normalMatrix * normal );//just for glow
+				gl_Position = projectionMatrix * modelViewMatrix * vec4( position, 1.0 );
+			}	
+ 		</script>
+ 		
+
+		<script>//functions
+			function getWindowDimensions(){
+				{//Width, Height
+				var w = window,
+					d = document,
+					e = d.documentElement,
+					g = d.getElementsByTagName('body')[0],
+					x = w.innerWidth || e.clientWidth || g.clientWidth,
+					y = w.innerHeight|| e.clientHeight|| g.clientHeight;
+				}	
+				
+				return {
+					width:  x,
+					height: y
+				}
+			}	
+			
+			function InitThreeRenderer(Width, Height, divElement) {
+				renderer = new THREE.WebGLRenderer({antialias	: true});
+				renderer.setSize( Width, Height );
+				divElement.appendChild( renderer.domElement );
+				
+				//shadows
+				renderer.shadowMapEnabled = true;
+				renderer.shadowMapType = THREE.PCFSoftShadowMap;
+				// object3d.castShadow = true;
+				// object3d.receiveShadow = false;
+				renderer.autoClear = false;//this allows rendering of two scenes together, but destroys the screen edges
+
+				return{
+						renderer: renderer 
+				}				
+			}
+			
+			function updateEarth(){//createPlanet(), createOrbitEarth(), Earth_pivot
+					{//Earth (part of Earth_pivot)
+					Earth_pivot.remove( Earth );//updates rotation around the Sun
+					
+					Earth = createPlanet( params.distanceEarthSun , params.sizeEarth , material_Earth);
+					Earth.rotation.y = tempEarthRotation;//remembering the "old" position (rotation around eigen axis)
+					Earth.castShadow = false;
+					Earth.receiveShadow = true;
+					
+					Earth_pivot.add( Earth );
+					}
+					
+					{//clouds (part of Earth)
+					Earth.remove(EarthClouds); //clouds are "following" the Earth
+					EarthClouds = createPlanet( 0., params.sizeEarth + 0.1 , material_Earth_Cloud);
+					EarthClouds.castShadow = false;
+					EarthClouds.receiveShadow = true;	
+					Earth.add(EarthClouds);
+					}
+
+					{//axis (part of Earth)
+					Earth.remove(EarthAxis);
+					Earth.add(EarthAxis);
+					}					
+					
+					{//orbit (part of Earth_pivot)
+					Earth_pivot.remove( EarthOrbit );
+					EarthOrbit = createOrbitEarth( params.distanceEarthSun, earth_orbit_color );
+					if(params.orbitEarthOn == true) Earth_pivot.add( EarthOrbit );
+					}
+					
+					{//labels
+					if(labelWinter){
+						scene2.remove(labelWinter);
+						scene2.remove(labelSummer);
+						scene2.remove(labelSpring);
+						scene2.remove(labelAutumn);
+						if(params.labelSeasons == true){
+							scene2.add( labelWinter );
+							scene2.add( labelSummer );
+							scene2.add( labelSpring );
+							scene2.add( labelAutumn );
+						}
+					}
+					}
+					
+					{//time zones (part of Earth) - Commented Out
+// 					if(params.timeZonesOn == true){
+// 					Earth.remove(EarthTimeZones);
+// 					Earth.add(EarthTimeZones);
+// 					}
+					}
+					
+					{//heat mesh 
+					scene2.remove(earth_Heat);
+					if(params.meshHeat == true){
+							earth_Heat.castShadow = false;
+							earth_Heat.receiveShadow = true;		
+							scene2.add( earth_Heat );
+					}
+					}
+			}//update Earth
+			function updateMoon(){//createPlanet(), createOrbitMoon(), Moon_Pivot
+					{//Moon (part of Moon_Pivot)
+					Moon_Pivot.remove(MoonThe);
+					
+					MoonThe = createPlanetShiftTexture( params.distanceMoonEarth, params.sizeMoon, material_Moon );
+					MoonThe.rotation.y = tempMoonRotation;//remembering the "old" position (rotation around eigen axis)
+// 					MoonThe.rotation.z = obliquityMoon;//moon obliquity 6.7
+					MoonThe.receiveShadow = false;
+					MoonThe.castShadow = true;
+										
+					Moon_Pivot.add(MoonThe);
+					}
+
+					{//axis (part of MoonThe)
+					MoonThe.remove(MoonAxis);
+					MoonThe.add(MoonAxis);
+					}					
+					
+					{//orbit (part of Moon_Pivot)
+					Moon_Pivot.remove(MoonOrbit);
+					MoonOrbit = createOrbitMoon( params.distanceMoonEarth, moon_orbit_color );
+					if(params.orbitMoonOn == true) Moon_Pivot.add(MoonOrbit);
+					}
+			}//update moon
+	
+			function updateOrbits(distance){//also within updateEarth and updateMoon
+					{//orbit (part of Earth_pivot)
+					if(Earth){
+					Earth_pivot.remove( EarthOrbit );
+					EarthOrbit = createOrbitEarth( params.distanceEarthSun, earth_orbit_color );
+					if(params.orbitEarthOn == true) Earth_pivot.add( EarthOrbit );
+					}
+					}
+					
+					{//orbit (part of Moon_Pivot)
+					if(MoonThe){
+					Moon_Pivot.remove(MoonOrbit);
+					MoonOrbit = createOrbitMoon( params.distanceMoonEarth, moon_orbit_color );
+					if(typeof distance !== "undefined"){ MoonOrbit = createOrbitMoon( distance, moon_orbit_color ); };
+					if(params.orbitMoonOn == true) Moon_Pivot.add(MoonOrbit);
+					}
+					}					
+			}			
+			function updateMoonDist(distance){//also within updateMoon - not Used
+					{//Moon (part of Moon_Pivot)
+					Moon_Pivot.remove(MoonThe);
+					
+					MoonThe = createPlanet( distance, params.sizeMoon, material_Moon );
+					MoonThe.rotation.y = tempMoonRotation;//remembering the "old" position (rotation around eigen axis)
+// 					MoonThe.rotation.z = obliquityMoon;//moon obliquity 6.7
+					MoonThe.receiveShadow = false;
+					MoonThe.castShadow = true;
+										
+					Moon_Pivot.add(MoonThe);
+					}				
+					
+					{//axis (part of MoonThe)
+					MoonThe.remove(MoonAxis);
+					MoonThe.add(MoonAxis);
+					}					
+					
+					{//orbit (part of Moon_Pivot)
+					Moon_Pivot.remove(MoonOrbit);
+					MoonOrbit = createOrbitMoon( distance, moon_orbit_color );
+					if(params.orbitMoonOn == true) Moon_Pivot.add(MoonOrbit);
+					}					
+			}
+			
+			function InitThreeScene() {
+				scene = new THREE.Scene();//first scene with the sun, enviroment sphere
+				scene2 = new THREE.Scene();//second scene with the Earth_pivot (so the whole system minus the Sun) + the lights
+			}					
+			function InitThreeLights(){
+				{//lights
+// 				light1 = new THREE.DirectionalLight( 0x888888, 2 );
+// 				light1.position.set( 1, 1, 1  ).normalize();
+// 				light0 = new THREE.AmbientLight( 0x404040 ); //  soft white light
+
+				light2 = new THREE.PointLight( 0xffe8d9, 2, 0 );
+				light2.add( new THREE.Mesh( Sun, new THREE.MeshBasicMaterial( { color: 0xff0040 } ) ) );
+				scene2.add( light2 );
+				
+				spotLight = new THREE.SpotLight( 0xffffff ); 
+				spotLight.position.set( 0, 0, 0 );
+				spotLight.target.position.set(150, 0, 0);
+				spotLight.castShadow = true; 
+				spotLight.shadowMapWidth = 1024; //2048; //causes some artifacts (upper Earth shadowed)
+				spotLight.shadowMapHeight = 1024; 
+				spotLight.shadowCameraNear = 15; 
+				spotLight.shadowCameraFar = 540; 
+				spotLight.shadowCameraFov = 70; 
+// 				spotLight.shadowCameraNear	= 0.01;		
+				spotLight.shadowDarkness	= 0.99;//0.95;
+// 				spotLight.shadowCameraVisible	= true;
+				scene2.add( spotLight );
+				}				
+			}
+			function InitCameras(){//also controls
+				{//views
+				for (var ii =  views.length-1; ii >= 0; ii-- ) {
+					var view = views[ii];
+					camera = new THREE.PerspectiveCamera( view.fov, window.innerWidth / window.innerHeight, 1, 10000 );
+					camera.position.x = view.eye[ 0 ];
+					camera.position.y = view.eye[ 1 ];
+					camera.position.z = view.eye[ 2 ];
+					camera.up.x = view.up[ 0 ];
+					camera.up.y = view.up[ 1 ];
+					camera.up.z = view.up[ 2 ];
+					view.camera = camera;
+					
+// 					var cameraHelper = new THREE.CameraHelper(camera);
+// 					scene.add(cameraHelper);
+				
+					//so I can't control all viewports, if using OrbitControls
+					//one viewport (the last one, hence the reversed loop) if using TrackballControls
+					//(the big canvas needs to be drawn first, otherwise it covers the small ones)
+// 					controls = new THREE.TrackballControls( camera );//gets stuck with dat.gui, fix below
+					controls = new THREE.TrackballControls( camera, renderer.domElement );
+					controls.noZoom = false;
+					controls.noPan = true;
+					controls.minDistance = 300;//max zoom in
+					controls.maxDistance = 1500;//max zoom out		
+				}
+				}//views				
+				
+// 				var cameraHelper = new THREE.CameraHelper(views[1].camera);
+// 				scene.add(cameraHelper);				
+			}
+			
+			//objects
+			function InitEnviromentSphere(){//outside of InitObjects
+				{//starfield (enviroment sphere)
+				var starfield_geo = new THREE.SphereGeometry(1620, 32, 32, Math.PI/2., 2*Math.PI, 0, Math.PI);//620
+				starfield  = new THREE.Mesh(starfield_geo, starfield_material);
+				starfield.rotation.z = -65*Math.PI/180;//61
+				scene.add(starfield);
+				}				
+			}			
+			
+			function createPlanet( distanceToSunKM, radiusKM, material ){
+				var planetGeo = new THREE.SphereGeometry( radiusKM, 32, 32 );
+				var planet = new THREE.Mesh( planetGeo, material );
+				planet.position.x = distanceToSunKM;
+				return planet;	
+			}
+			function createPlanetShiftTexture( distanceToSunKM, radiusKM, material ){
+				var planetGeo = new THREE.SphereGeometry( radiusKM, 32, 32, Math.PI + Math.PI/8., 2*Math.PI, 0, Math.PI );
+				var planet = new THREE.Mesh( planetGeo, material );
+				planet.position.x = distanceToSunKM;
+				return planet;	
+			}			
+			function createOrbitEarth( radius, color, representationScale ){
+				color = color ? color : 0xffffff;
+				representationScale = representationScale ? representationScale : 1;
+
+				radius2=radius;
+				
+				width = Math.sqrt(radius2) * 0.00001 * representationScale;
+				thickness = radius2 * 0.0005;
+				textureRepeat = 30;
+
+				resolution = radius2*4;
+				twoPI = Math.PI * 2;
+				angPerRes = twoPI / resolution;	
+				verts = [];
+				verts2 = [];	
+				threshold = 0.8;//threshold for solstice points
+				pointSize = 12;//[];pointSize.push(12);
+				pointSize2 = 82;
+				
+				for( var i=0; i<twoPI; i+=angPerRes ){ //elipse
+					x = ElipseCoordinates(i, radius2, elipse_parameter1_earth, elipse_parameter2_earth, angleElipseEarth);
+					tempx = x.x;
+					tempy = x.z;
+					
+					v = new THREE.Vector3( tempx,tempy,0. );					
+					
+// 					//second set of vectors with solstices
+					if((tempx<threshold && tempx>-threshold) || (tempy<threshold && tempy>-threshold)){
+						verts2.push( v );//pointSize.pop(12);pointSize.push(52);
+					}
+					
+					verts.push( v );
+				}
+				{//diagonal - Commented Out
+// 				for( var i=0; i<1.; i+= 1./100.){ //diagonal
+// 					spot1 = 0.;
+// 					spot2 = Math.PI;
+// 					tempx = ElipseCoordinates(spot1, radius2, elipse_parameter1_earth, elipse_parameter2_earth, angleElipseEarth);
+// 					x = tempx.x;
+// 					y = tempx.z;
+// 					
+// 					tempx2 = ElipseCoordinates(spot2, radius2, elipse_parameter1_earth, elipse_parameter2_earth, angleElipseEarth);
+// 					tempx = tempx2.x;
+// 					tempy = tempx2.z;					
+// 					
+// 					v = new THREE.Vector3( i*tempx + (1.-i)*x, i*tempy + (1.-i)*y,0. );
+// 					verts.push( v );
+// 				}
+// 				for( var i=0; i<1.; i+= 1./100.){ //diagonal
+// 					spot1 = Math.PI/2;
+// 					spot2 = 3*Math.PI/2;
+// 					tempx = ElipseCoordinates(spot1, radius2, elipse_parameter1_earth, elipse_parameter2_earth, angleElipseEarth);
+// 					x = tempx.x;
+// 					y = tempx.z;
+// 					
+// 					tempx2 = ElipseCoordinates(spot2, radius2, elipse_parameter1_earth, elipse_parameter2_earth, angleElipseEarth);
+// 					tempx = tempx2.x;
+// 					tempy = tempx2.z;	
+// 					
+// 					v = new THREE.Vector3( i*tempx + (1.-i)*x, i*tempy + (1.-i)*y,0. );
+// 					verts.push( v );
+// 				}
+				}
+				{//additional diagonals - Commented Out
+// 				for( var i=0; i<1.; i+= 1./300.){
+// 					spot1 = 0. + angleElipseEarth;
+// 					spot2 = Math.PI + angleElipseEarth;
+// 					
+// 					tempx = ElipseCoordinates(spot1, radius2, elipse_parameter1_earth, elipse_parameter2_earth, angleElipseEarth);
+// 					x = tempx.x;
+// 					y = tempx.z;					
+// 					
+// 					tempx2 = ElipseCoordinates(spot2, radius2, elipse_parameter1_earth, elipse_parameter2_earth, angleElipseEarth);
+// 					tempx = tempx2.x;
+// 					tempy = tempx2.z;	
+// 					
+// 					v = new THREE.Vector3( i*tempx + (1.-i)*x, i*tempy + (1.-i)*y,0. );
+// 					verts.push( v );
+// 				}				
+// 				for( var i=0; i<1.; i+= 1./300.){
+// 					spot1 = Math.PI/2 + angleElipseEarth;
+// 					spot2 = 3*Math.PI/2 + angleElipseEarth;
+// 					
+// 					tempx = ElipseCoordinates(spot1, radius2, elipse_parameter1_earth, elipse_parameter2_earth, angleElipseEarth);
+// 					x = tempx.x;
+// 					y = tempx.z;					
+// 					
+// 					tempx2 = ElipseCoordinates(spot2, radius2, elipse_parameter1_earth, elipse_parameter2_earth, angleElipseEarth);
+// 					tempx = tempx2.x;
+// 					tempy = tempx2.z;	
+// 					
+// 					v = new THREE.Vector3( i*tempx + (1.-i)*x, i*tempy + (1.-i)*y,0. );
+// 					verts.push( v );
+// 				}
+				}
+				
+				geometry = new THREE.Geometry();
+				geometry.vertices = verts;
+				areaOfWindow = window.innerWidth * window.innerHeight;
+
+				geometry2 = new THREE.Geometry();
+				geometry2.vertices = verts2;
+
+				particleMaterial = new THREE.PointCloudMaterial({
+						color: color, 
+						size: pointSize, 
+// 						sizeAttenuation: true, 
+						map: texture_orbit_sprite,
+						blending: THREE.AdditiveBlending,
+						depthTest: true,
+						depthWrite: false,
+						transparent: true,
+						opacity: orbit_opacity,//0.9
+				});
+				particleMaterial2 = new THREE.PointCloudMaterial({
+						color: color, 
+						size: pointSize2, 
+						map: texture_orbit_sprite,
+						blending: THREE.AdditiveBlending,
+						depthTest: true,
+						depthWrite: false,
+						transparent: true,
+						opacity: orbit_opacity
+				});				
+				
+				mesh = new THREE.PointCloud( geometry, particleMaterial );
+				//solstice, equnox points are commented out here
+				meshB = new THREE.PointCloud( geometry2, particleMaterial2 );//just solstice points
+				mesh.add(meshB);
+				
+				mesh.rotation.x = Math.PI/2;
+				return mesh;
+			}
+			function createOrbitMoon( radius, color, representationScale ){
+				color = color ? color : 0xffffff;
+				representationScale = representationScale ? representationScale : 1;
+
+				radius2=radius;
+				
+				width = Math.sqrt(radius2) * 0.00001 * representationScale;
+				thickness = radius2 * 0.0005;
+				textureRepeat = 30;
+
+				resolution = radius2*4;
+				twoPI = Math.PI * 2;
+				angPerRes = twoPI / resolution;	
+				verts = [];
+				for( var i=0; i<twoPI; i+=angPerRes ){//elipse
+					x = ElipseCoordinates(i, radius2, elipse_parameter1_moon, elipse_parameter2_moon, angleElipseMoon);
+					tempx = x.x;
+					tempy = x.z;					
+					
+					v = new THREE.Vector3( tempx,tempy,0. );
+					verts.push( v );
+				}
+				{//diagonal - Commented Out
+// 				for( var i=0; i<1.; i+= 1./50.){//diagonal
+// 					spot1 = 0.;
+// 					spot2 = Math.PI;
+// 					
+// 					tempx = ElipseCoordinates(spot1, radius2, elipse_parameter1_moon, elipse_parameter2_moon, angleElipseMoon);
+// 					x = tempx.x;
+// 					y = tempx.z;
+// 					
+// 					tempx2 = ElipseCoordinates(spot2, radius2, elipse_parameter1_moon, elipse_parameter2_moon, angleElipseMoon);
+// 					tempx = tempx2.x;
+// 					tempy = tempx2.z;					
+// 					
+// 					v = new THREE.Vector3( i*tempx + (1.-i)*x, i*tempy + (1.-i)*y,0. );
+// 					verts.push( v );
+// 				}
+// 				for( var i=0; i<1.; i+= 1./50.){//diagonal
+// 					spot1 = Math.PI/2;
+// 					spot2 = 3*Math.PI/2;
+// 					
+// 					tempx = ElipseCoordinates(spot1, radius2, elipse_parameter1_moon, elipse_parameter2_moon, angleElipseMoon);
+// 					x = tempx.x;
+// 					y = tempx.z;
+// 					
+// 					tempx2 = ElipseCoordinates(spot2, radius2, elipse_parameter1_moon, elipse_parameter2_moon, angleElipseMoon);
+// 					tempx = tempx2.x;
+// 					tempy = tempx2.z;					
+// 					
+// 					v = new THREE.Vector3( i*tempx + (1.-i)*x, i*tempy + (1.-i)*y,0. );
+// 					verts.push( v );
+// 				}				
+				}
+				
+				geometry = new THREE.Geometry();
+				geometry.vertices = verts;
+				areaOfWindow = window.innerWidth * window.innerHeight;
+
+				pointSize = 12;
+				particleMaterial = new THREE.PointCloudMaterial({
+						color: color, 
+						size: pointSize, 
+// 						sizeAttenuation: true, 
+						map: texture_orbit_sprite,
+						blending: THREE.AdditiveBlending,
+						depthTest: true,
+						depthWrite: false,
+						transparent: true,
+						opacity: orbit_opacity,//0.9
+				});
+
+				mesh = new THREE.PointCloud( geometry, particleMaterial );
+				mesh.rotation.x = Math.PI/2;
+				return mesh;
+			}	
+
+			function InitSun(){
+				{//Sun
+				Sun = new THREE.Mesh(new THREE.SphereGeometry( params.sizeSun,32,32 ), materialSun);//696000 / 100000
+				scene.add( Sun );
+
+				{//sprites
+					// sun-sprite
+					sprite = new THREE.Sprite(new THREE.SpriteMaterial({
+						map: texture_Sun_Sprite,
+						transparent: true,
+						blending: THREE.AdditiveBlending,
+						useScreenCoordinates: true,
+						color: 0xE86C19,//yellow
+						depthWrite: true,
+						depthTest: true,
+						alphaTest: 0.2
+					}));
+					sprite.scale.x = params.sizeSun*1.0*4.5;
+					sprite.scale.y = params.sizeSun*1.0*4.5;
+					sprite.scale.z = 1.;
+					scene.add(sprite);
+					scene2.add(sprite);//to occlude the Earth,Moon
+
+		
+					sprite2 = new THREE.Sprite(new THREE.SpriteMaterial({
+						map: texture_Sun_sprite2,
+						transparent: true,
+						blending: THREE.AdditiveBlending,//[ "NoBlending", "NormalBlending", "AdditiveBlending", "SubtractiveBlending", "MultiplyBlending", "AdditiveAlphaBlending" ];
+						useScreenCoordinates: true,
+						color: 0xffffff,
+						depthWrite: false,
+						depthTest: false,
+						alphaTest: 0.9,
+					}));
+					sprite2.scale.x = params.sizeSun*2.7*4.5;
+					sprite2.scale.y = params.sizeSun*2.7*4.5;
+					sprite2.scale.z = 1;
+
+					scene.add(sprite2);
+
+					sprite3 = new THREE.Sprite(new THREE.SpriteMaterial({
+						map: texture_Sun_sprite2,
+						transparent: true,
+						blending: THREE.AdditiveBlending,
+						useScreenCoordinates: true,
+						color: 0xffffff,
+						depthWrite: false,
+						depthTest: true,
+						alphaTest: 0.9,
+					}));
+					sprite3.scale.x = params.sizeSun*1.7*4.5;
+					sprite3.scale.y = params.sizeSun*1.7*4.5;
+					sprite3.scale.z = 1;
+					sprite.rotation.z = 90*Math.PI/180;
+					
+					scene2.add(sprite3);//to occlude the Earth,Moon
+				}				
+				}//Sun				
+			}
+			function InitEarth(){//createPlanet(), createOrbitEarth()
+				{//Earth
+				Earth = new THREE.Mesh( new THREE.SphereGeometry( params.sizeEarth, 32, 32 ), material_Earth );
+// 				Earth.position.x = params.distanceEarthSun;				
+				Earth.castShadow = false;//not to cast shadow on the Moon
+				Earth.receiveShadow = true;	
+
+				earth_Heat =  new THREE.Mesh( new THREE.SphereGeometry( params.sizeEarth + 0.6, 32, 32, 3.*Math.PI/2), material_Earth_Heat );//need to start the texture later//not adding it to Earth_pivot -> so no rotations
+				earth_Heat.castShadow = false;
+				earth_Heat.receiveShadow = true;	//want the night side to be dark (for this I need the Phong Material), but I also want the shadow
+				if(params.meshHeat == true) scene2.add( earth_Heat );
+// 				EarthTimeZones = new THREE.Mesh( new THREE.SphereGeometry( params.sizeEarth + 0.4, 32, 32, -1.*Math.PI/180), material_Earth_Time_Zones );
+// 				if(params.timeZonesOn == true) Earth.add(EarthTimeZones);
+
+				EarthClouds = createPlanet( 0., params.sizeEarth + 0.1 , material_Earth_Cloud);
+				EarthClouds.castShadow = false;
+				EarthClouds.receiveShadow = true;	
+				Earth.add(EarthClouds);
+				EarthAxis = new THREE.Mesh(new THREE.CylinderGeometry( 1, 1, 200, 32, 32 ), earth_axis_material);
+				Earth.add(EarthAxis);
+				EarthOrbit = createOrbitEarth( params.distanceEarthSun, earth_orbit_color);
+				}//Earth
+			}
+			function InitMoon(){//createPlanet(), createOrbitMoon()
+				{//Moon
+				MoonThe = createPlanetShiftTexture( params.distanceMoonEarth, params.sizeMoon, material_Moon );
+// 				MoonThe.rotation.z = obliquityMoon;//moon obliquity 6.7
+				
+				MoonThe.receiveShadow = false;//not to recieve shadow from the Earth
+				MoonThe.castShadow = true;
+
+				MoonAxis = new THREE.Mesh(new THREE.CylinderGeometry( 1, 1, 100, 32, 32 ), moon_axis_material);
+				MoonThe.add(MoonAxis);
+
+				MoonOrbit = createOrbitMoon( params.distanceMoonEarth , moon_orbit_color);
+				}
+			}
+			function InitPivots(){//MoonThe
+				{//pivots
+				if(Earth){
+				//object that rotates around the Sun
+				Earth_pivot = new THREE.Object3D();
+				Earth_pivot.add( Earth );
+				Earth_pivot.add( EarthOrbit );
+// 				Earth_pivot.add( MoonThe );
+				scene2.add( Earth_pivot );
+				}
+				
+				if(MoonThe) {
+				Moon_Pivot = new THREE.Object3D();
+				Moon_Pivot.add(MoonThe);
+				Moon_Pivot.add(MoonOrbit);
+// 				Moon_Pivot.position.x = Earth.position.x; 
+// 				Moon_Pivot.position.z = Earth.position.z; 
+
+				Earth_pivot.add(Moon_Pivot);
+				}
+				}				
+			}
+			function InitAxes(){
+				{//axes
+				axis = new THREE.AxisHelper(175);
+// 				axis.rotation.z=Math.PI;//reversing the axis to align the solstice/equinox positions
+// 				axis.rotation.x=Math.PI;
+				scene.add(axis);  
+				}
+			}
+			
+			//labels
+			function DrawRectangle(ctx, x, y, w, h, r){
+					ctx.beginPath();
+					ctx.moveTo(x+r, y);
+					ctx.lineTo(x+w-r, y);
+					ctx.quadraticCurveTo(x+w, y, x+w, y+r);
+					ctx.lineTo(x+w, y+h-r);
+					ctx.quadraticCurveTo(x+w, y+h, x+w-r, y+h);
+					ctx.lineTo(x+r, y+h);
+					ctx.quadraticCurveTo(x, y+h, x, y+h-r);
+					ctx.lineTo(x, y+r);
+					ctx.quadraticCurveTo(x, y, x+r, y);
+					ctx.closePath();
+					ctx.fill();
+					ctx.stroke();   
+			}				
+			function TextSprite( message, parameters ){
+					//https://stemkoski.github.io/Three.js/Sprite-Text-Labels.html
+					if ( parameters === undefined ) parameters = {};
+					
+					var fontface = parameters.hasOwnProperty("fontface") ? 
+// 						parameters["fontface"] : "Arial";
+						parameters["fontface"] : "Helvetica Neue LT Com";
+					
+					var fontsize = parameters.hasOwnProperty("fontsize") ? 
+						parameters["fontsize"] : 18;
+					
+					var borderThickness = parameters.hasOwnProperty("borderThickness") ? 
+						parameters["borderThickness"] : 4;
+					
+					var borderColor = parameters.hasOwnProperty("borderColor") ?
+						parameters["borderColor"] : { r:0, g:0, b:0, a:1.0 };
+					
+					var backgroundColor = parameters.hasOwnProperty("backgroundColor") ?
+						parameters["backgroundColor"] : { r:255, g:255, b:255, a:1.0 };
+
+					var fontColor = parameters.hasOwnProperty("fontColor") ?
+						parameters["fontColor"] : { r:0, g:0, b:0, a:1.0 };
+						
+					var canvas = document.createElement('canvas');
+					var context = canvas.getContext('2d');
+// 					context.font = "Bold " + fontsize + "px " + fontface;
+					context.font = " " + fontsize + "px " + fontface;
+					
+					// get size data (height depends only on font size)
+					var metrics = context.measureText( message );
+					var textWidth = metrics.width;
+					
+					// background color
+					context.fillStyle   = "rgba(" + backgroundColor.r + "," + backgroundColor.g + ","
+												+ backgroundColor.b + "," + backgroundColor.a + ")";
+					
+					// border color
+					context.strokeStyle = "rgba(" + borderColor.r + "," + borderColor.g + ","
+												+ borderColor.b + "," + borderColor.a + ")";
+
+					context.lineWidth = borderThickness;
+					DrawRectangle(context, borderThickness/2, borderThickness/2, textWidth + borderThickness, fontsize * 1.4 + borderThickness, 6);
+					// 1.4 is extra height factor for text below baseline: g,j,p,q.
+					
+					// text color
+					context.fillStyle   = "rgba(" + fontColor.r + "," + fontColor.g + "," + fontColor.b + "," + fontColor.a + ")";//"rgba(0, 100, 255, 1.0)";//cyanish
+					
+					context.fillText( message, borderThickness, fontsize + borderThickness);
+					
+					// canvas contents will be used for a texture
+					var texture = new THREE.Texture(canvas) 
+					texture.needsUpdate = true;
+
+					var spriteMaterial = new THREE.SpriteMaterial( 
+						{ map: texture, useScreenCoordinates: false } );//, alignment: spriteAlignment
+					var sprite = new THREE.Sprite( spriteMaterial );
+					sprite.scale.set(100,50,1.0);
+					return sprite;	
+			}
+			function InitLabels(){//language change of the season labels
+				{//labels
+				scene2.remove( labelWinter );
+				scene2.remove( labelSummer );
+				scene2.remove( labelSpring );
+				scene2.remove( labelAutumn );
+				
+				if(!getUrlVars()["lang"]) {//default
+					//seasons_location = "Garching";//"Chile"
+					var W =  " Winter N ";
+					var Su =  " Summer N ";
+					var Sp =  " Spring N ";
+					var A =  " Autumn N ";
+					if(seasons_location == "Chile"){
+						W =  " Summer S ";
+						Su =  " Winter S ";
+						Sp =  " Autumn S ";
+						A =  " Spring S ";
+					}
+				}
+				if(getUrlVars()["lang"] == "en") {
+					//seasons_location = "Garching";//"Chile"
+					var W =  " Winter N ";
+					var Su =  " Summer N ";
+					var Sp =  " Spring N ";
+					var A =  " Autumn N ";
+					if(seasons_location == "Chile"){
+						W =  " Summer S ";
+						Su =  " Winter S ";
+						Sp =  " Autumn S ";
+						A =  " Spring S ";
+					}
+				}
+				if(getUrlVars()["lang"] == "de") {
+					//seasons_location = "Garching";//"Chile"
+					var W =  " Winter N ";
+					var Su =  " Sommer N ";
+					var Sp =  " Frühling N ";
+					var A =  " Herbst N ";
+					if(seasons_location == "Chile"){
+						W =  " Sommer S ";
+						Su =  " Winter S ";
+						Sp =  " Herbst S ";
+						A =  " Frühling S ";
+					}
+				}
+				
+				labelWinter =  TextSprite( W, 
+					{ fontsize: 42, borderColor: {r:0, g:119, b:190, a:1.0}, backgroundColor: {r:180, g:180, b:180, a:0.5}, fontColor: {r:255, g:255, b:255, a:1.0}});
+				labelWinter.position.set(-12.,0,params.distanceEarthSun + 40.);
+				if(params.labelSeasons == true) scene2.add( labelWinter );
+				
+				labelSummer =  TextSprite( Su, 
+					{ fontsize: 42, borderColor: {r:0, g:119, b:190, a:1.0}, backgroundColor: {r:180, g:180, b:180, a:0.5}, fontColor: {r:255, g:255, b:255, a:1.0} } );
+				labelSummer.position.set(-12.,0,-params.distanceEarthSun - 110.);
+				if(params.labelSeasons == true) scene2.add( labelSummer );
+				
+				labelSpring =  TextSprite( Sp, 
+					{ fontsize: 42, borderColor: {r:0, g:119, b:190, a:1.0}, backgroundColor: {r:180, g:180, b:180, a:0.5}, fontColor: {r:255, g:255, b:255, a:1.0} } );
+				labelSpring.position.set(params.distanceEarthSun + 50., 0,12);
+				if(params.labelSeasons == true) scene2.add( labelSpring );
+				
+				labelAutumn =  TextSprite( A, 
+					{ fontsize: 42, borderColor: {r:0, g:119, b:190, a:1.0}, backgroundColor: {r:180, g:180, b:180, a:0.5}, fontColor: {r:255, g:255, b:255, a:1.0} } );
+				labelAutumn.position.set(-params.distanceEarthSun - 80, 0.,-12);
+				if(params.labelSeasons == true) scene2.add( labelAutumn );				
+				}			
+			}
+			
+			function InitObjects(){
+				InitSun();//independent
+				InitEarth();//needs pivots, Sun
+				InitMoon();//needs pivots, Earth
+				InitPivots();//independent
+				InitLabels();//independent
+// 				InitAxes();//independent
+			}
+			
+			//listeners
+			function touchHandler(event){//mapping touch events to mouse events
+				var touches = event.changedTouches, first = touches[0], type = "";
+			
+				switch(event.type){
+					case "touchstart": type = "mousedown"; break;
+					case "touchmove":  type="mousemove"; break;
+					case "touchend":   type="mouseup"; break;
+					default: return;
+				}
+				var simulatedEvent = document.createEvent("MouseEvent");
+				simulatedEvent.initMouseEvent(type, true, true, window, 1,
+										first.screenX, first.screenY,
+										first.clientX, first.clientY, false,
+										false, false, false, 0/*left*/, null);
+				first.target.dispatchEvent(simulatedEvent);
+			}						
+			function onWindowResize() {
+				uniforms.resolution.value.x = window.innerWidth;
+				uniforms.resolution.value.y = window.innerHeight;
+				
+				camera.aspect = window.innerWidth / window.innerHeight;
+				camera.updateProjectionMatrix();
+
+				renderer.setSize( window.innerWidth, window.innerHeight );
+			}			
+			function AddListeners(){
+				window.addEventListener( 'resize', onWindowResize, false );
+				
+				//mapping touch to mouse
+				window.addEventListener("touchstart", touchHandler, true);
+				window.addEventListener("touchmove", touchHandler, true);
+				window.addEventListener("touchend", touchHandler, true);
+				window.addEventListener("touchcancel", touchHandler, true);				
+			}
+
+			//animate and render
+			function updateSize() {
+				if ( windowWidth != window.innerWidth || windowHeight != window.innerHeight ) {
+					windowWidth  = window.innerWidth;
+					windowHeight = window.innerHeight;
+					renderer.setSize ( windowWidth, windowHeight );
+				}
+			}				
+			
+			function ElipseCoordinates(position, distance, elipseA, elipseB, angle){
+						//elipseA, elipseB fixed numbers describing an elipse
+						//elipse(t) = [a cos(t)		b sin(t)]^T
+						//a=(distance + elipseB)
+						//b=-(distance + elipseA)
+						tempx = (distance + elipseB)*Math.cos( position );
+						//moving to the focal point [- Math.sqrt(tempx2*tempx2 - tempy2*tempy2)]
+						tempx2 = distance+elipseA;
+						tempy2 = distance+elipseB;
+						tempz=-Math.sqrt(tempx2*tempx2 - tempy2*tempy2) -(distance + elipseA)*Math.sin( position );
+						//rotating an elipse angle degrees
+						var positionX= Math.cos( angle )*tempx + Math.sin( angle )*tempz;
+						var positionZ=-Math.sin( angle )*tempx + Math.cos( angle )*tempz;
+						
+						return{
+							x: positionX,
+							z: positionZ
+						}
+			}
+			function setCamera(camera, cameraTarget, cpx, cpy, cpz, ctx, cty, ctz){
+				camera.position.set(cpx, cpy, cpz);
+				cameraTarget.x = ctx;
+				cameraTarget.y = cty;
+				cameraTarget.z = ctz;
+				camera.lookAt(cameraTarget);
+			}			
+			function animate() {
+				controls.update();
+				requestAnimationFrame( animate );
+
+				{//Earth
+				if(Earth){
+				//rotation around the Sun
+				//instead of rotation of the pivot -> using the position change, to use rotation for axial tilt
+				
+				{//slider Earth1 and  Earth2 (Earth Position, Velocity)
+				if(params.presetTrue == false){
+				if ( parent.$ !== undefined ) {
+					var e = parent.$.elements;
+					rot_sp_e = e.scaleX3/1000.;//sliderEarthVelocity - Earth velocity 
+					
+					{//rotation new
+						//manual position (slider): e.scaleX*Math.PI/180.
+						//rotation velocity (sliderEarthVelocity): rot_sp_e 
+						position_par = e.scaleX*Math.PI/180.+rot_sp_e;
+						x = ElipseCoordinates(position_par, params.distanceEarthSun, elipse_parameter1_earth, elipse_parameter2_earth, angleElipseEarth);
+						Earth.position.x = x.x;
+						Earth.position.z = x.z;
+
+						{//setting the value of the 1st slider (earth position) based on the 2nd slider (earth velocity)
+						//Important to use ceil not round - otherwise the slider (e.scaleX) is not pushed up and the Earth doesn't animate properly
+						position_par_degrees = Math.ceil((position_par)%(2.*Math.PI)*(90/(Math.PI/2)));
+						if(rot_sp_e!=0){
+							$('#sliderEarthPosition').slider('value', position_par_degrees);
+							$('#amountEarthPosition').val( earth_position );
+							e.scaleX = position_par_degrees;//same value as slider, otherwise I get an offset (a jump) in the slider
+// 							rot_sp_e = 0;//otherwise can't stop the rotation because of the line above
+						}
+						}
+					}
+				}
+				}//preset is false
+				else if (params.presetTrue == true){
+					rotation_speed_e += (params.rotationEarthSun/1000.);
+					position_par = rotation_speed_e;
+					x = ElipseCoordinates(position_par, params.distanceEarthSun, elipse_parameter1_earth, elipse_parameter2_earth, angleElipseEarth);
+					Earth.position.x = x.x;
+					Earth.position.z = x.z;					
+				}
+				}//slider
+
+				{//heat mesh
+				//separately moving heat mesh, so that there is no inclination -> highest heat is always the same	
+				earth_Heat.position.x = Earth.position.x;
+				earth_Heat.position.z = Earth.position.z;
+				earth_Heat.lookAt(Sun.position);
+				}
+
+				{//slider Earth Eigen Axis Rotation
+					if(params.presetTrue == false){
+					if ( parent.$ !== undefined ) {
+						var e = parent.$.elements;
+						rotation_speed_ee += e.scaleX5/1000.;//remove the plus to just set the position
+						Earth.rotation.y = rotation_speed_ee;//eigen axis
+						tempEarthRotation = Earth.rotation.y;
+					}	
+					}//preset
+					else if(params.presetTrue == true){
+						//Earth eigen axis rotation
+						rotation_speed_ee += params.rotationEarthEigen/1000.;
+						Earth.rotation.y = rotation_speed_ee;//eigen axis
+						tempEarthRotation = Earth.rotation.y;						
+					}
+				}
+				
+				{//slider Earth Axial Tilt
+					if ( parent.$ !== undefined ) {
+						var e = parent.$.elements;
+						Earth.rotation.x = e.scaleX6 * Math.PI / 180;
+					}								
+				}
+				}//if
+				}//Earth
+ 				
+ 				{//Moon   ->   Moon_Pivot
+ 				if(MoonThe){
+ 				//dragging the moon orbit around the Sun together with the Earth
+				Moon_Pivot.position.x = Earth.position.x; //if using coordinates need to update the position here
+ 				Moon_Pivot.position.z = Earth.position.z; 
+
+// 				//next line locking the orbit of the Moon to always face the same (but I don't need that)
+// 				Moon_Pivot.rotation.y = -Earth_pivot.rotation.y;//compensation for rotation around the sun - facing same direction
+				
+				//moon axis inclination
+				MoonThe.rotation.x = obliquityMoon;//moon obliquity 6.7
+				
+				//rotation around the Earth
+// 				//using position for rotation around the orbit and rotation for inclination
+				
+				//transfering local Moon coordinates (MoonThe.position.x,0.0,MoonThe.position.z)
+				//to world coordinates (not relevant here) (MoonThe.localToWorld(locationMoonWorld))
+				//or to matrix world coordinates - relevant for camera lookAt function (locationMoonMatrixWorld.setFromMatrixPosition( MoonThe.matrixWorld ))
+				locationMoonMatrixWorld.setFromMatrixPosition( MoonThe.matrixWorld );
+				
+				{//sliderMoonPosition (Moon Position and Velocity and Distance from Earth) (Moon Faces Earth) 
+				if(params.presetTrue == false){
+				if ( parent.$ !== undefined ) {
+					var e = parent.$.elements;
+					
+					//set moon axis position (moon position slider updates correctly when velocity is set, no possibility to set axis rotation)
+					rot_sp_m = e.scaleX7/1000.;//Moon Velocity 
+// 					e.scaleX7=10;//lockdown
+										
+					{//rotation new
+						position_par = e.scaleX2*Math.PI/180.+rot_sp_m;
+						x = ElipseCoordinates(position_par, e.scaleX10, elipse_parameter1_moon, elipse_parameter2_moon, angleElipseMoon);
+						MoonThe.position.x = x.x;
+						MoonThe.position.z = x.z;
+						updateOrbits(e.scaleX10);
+
+						{//setting the value of the 2nd slider (moon position) based on the 7th slider (moon velocity)
+						//Important to use ceil not round - otherwise the slider (e.scaleX2) is not pushed up and the Moon doesn't animate properly
+						position_par_degrees = Math.ceil((position_par)%(2.*Math.PI)*57.295779513);
+						if(rot_sp_m!=0){
+							$('#sliderMoonPosition').slider('value', position_par_degrees );
+							$('#amountMoonPosition').val( moon_position );
+							e.scaleX2 = position_par_degrees;//same value as slider, otherwise I get an offset (a jump) in the slider
+						}
+						}//second slider
+					}
+				}
+				}//preset
+				else if (params.presetTrue == true){
+					rotation_speed_m += params.rotationMoonEarth/1000.;
+					position_par = rotation_speed_m;
+					x = ElipseCoordinates(position_par, e.scaleX10, elipse_parameter1_moon, elipse_parameter2_moon, angleElipseMoon);
+					MoonThe.position.x = x.x;
+					MoonThe.position.z = x.z;
+					updateOrbits(e.scaleX10);
+				}
+				}//slider
+				
+				{//slider Moon Eigen Axis Rotation (Moon Faces Earth)
+					if(params.presetTrue == false){
+					if ( parent.$ !== undefined ) {
+						var e = parent.$.elements;
+
+						if(params.moonFacesEarth==true){//if Moon Facing Earth - follow the Moon Velocity
+							e.scaleX8 = e.scaleX2;//if the Moon animation is updated through slider (e.scaleX8 should represent position, not velocity)
+							//snap to slider value
+							$('#sliderMoonEigen').slider('value', e.scaleX8);
+// 							$('#amountMoonEigen').val( $( '#sliderMoonEigen' ).slider( "value" )  + "   Moon Eigen Axis Position");		
+							$('#amountMoonEigen').val( moon_eaxis_position );
+						}
+						
+						{//position
+// 							if(e.scaleX8b!=0){//velocity is not zero
+								if(params.moonFacesEarth==true){//cannot use velocity, but will update its slider
+									e.scaleX8b = e.scaleX7;//match to Moon Velocity
+									$('#sliderMoonEigen2').slider('value', e.scaleX8b );//update the position slider value
+// 									$('#amountMoonEigen2').val( $( '#sliderMoonEigen2' ).slider( "value" )  + "   Moon Eigen Axis Velocity");//update the shown number
+									$('#amountMoonEigen2').val( moon_eaxis_velocity );//update the shown number
+								
+									//no influence on the rotation
+									rotation_speed_me = e.scaleX8*Math.PI/180.; //moon axis position
+									MoonThe.rotation.y = rotation_speed_me;//eigen axis //moon axis position					
+								}
+								if(params.moonFacesEarth==false){//then can use velocity
+									rotation_speed_me = e.scaleX8*Math.PI/180. + e.scaleX8b/1000; //moon axis position
+									MoonThe.rotation.y = rotation_speed_me;//eigen axis //moon axis position
+									//still need to update the position slider and drive the animation by this update
+									position_par_degrees = Math.ceil((rotation_speed_me)%(2.*Math.PI)*57.295779513);
+									if(e.scaleX8b/1000!=0){
+										$('#sliderMoonEigen').slider('value', position_par_degrees );//update the position slider value
+// 										$('#amountMoonEigen').val( $( '#sliderMoonEigen' ).slider( "value" )  + "   Moon Eigen Axis Position");//update the shown number
+										$('#amountMoonEigen').val( moon_eaxis_position );//update the shown number
+										e.scaleX8 = position_par_degrees;//update the slider/run the animation 
+									}
+								}
+// 							}
+// 							else{//velocity is zero
+// 								rotation_speed_me = e.scaleX8*Math.PI/180.; //moon axis position
+// 								MoonThe.rotation.y = rotation_speed_me;//eigen axis //moon axis position								
+// 							}
+						}
+						tempMoonRotation = MoonThe.rotation.y;
+						rotation_speed_me = 0;
+					}
+					}//preset
+					else if (params.presetTrue == true){
+						rotation_speed_me += params.rotationMoonEigen/1000.;
+						MoonThe.rotation.y = rotation_speed_me;
+// 						tempMoonRotation = MoonThe.rotation.y;
+					}
+				}
+			
+				{//slider Moon Orbit Inclination
+					if ( parent.$ !== undefined ) {
+						var e = parent.$.elements;
+						Moon_Pivot.rotation.z = e.scaleX9 * Math.PI / 180;//eclipses in Winter, Summer not in Spring, Autumn
+					}			
+				}
+				}//if
+				}//Moon
+	
+				{//Sun sprite animation
+					if(sprite){
+// 					sprite.scale.x = Math.abs(0.05*Math.sin(uniforms.time.value ) + 1.0)*params.sizeSun*1.0*4.5;
+// 					sprite.scale.y = Math.abs(0.05*Math.sin(uniforms.time.value ) + 1.0)*params.sizeSun*1.0*4.5;
+					sprite.material.rotation -= 0.03*Math.PI/180;
+					}
+					
+					if(sprite2){
+// 					sprite2.scale.x = Math.abs(0.1*Math.sin(uniforms.time.value ) + 1.1)*params.sizeSun*2.7*4.5;
+					sprite2.material.rotation += 0.03*Math.PI/180;
+					}
+					
+					if(sprite3){
+// 					sprite3.scale.x = Math.abs(0.1*Math.cos(uniforms.time.value ) + 1.1)*params.sizeSun*2.7*4.5;
+// 					sprite3.scale.y = Math.abs(0.1*Math.sin(uniforms.time.value ) + 1.1)*params.sizeSun*2.7*4.5;
+					sprite3.material.rotation -= 0.05*Math.PI/180;
+					}				
+				}
+	
+				{//orbit opacity slider
+					if ( parent.$ !== undefined ) {
+						var e = parent.$.elements;
+						orbit_opacity = e.scaleX4/100.;//sliderOrbitOpacity - Orbit Opacity 
+	
+						if(temp!= e.scaleX4){
+							updateOrbits(e.scaleX10);
+							temp = e.scaleX4;
+						}
+					}
+				}
+				
+				{//shadows - should put lights into the shader
+				if(Earth){
+				spotLight.target.position.x = Earth.position.x;//following Earth.position
+				spotLight.target.position.z = Earth.position.z;//need to follow the planet rotation_speed_e
+				}
+				}	
+	
+				{//big screen free camera focus
+					{//free camera
+						view = views[0];//choose the big one
+						camera = view.camera;
+						
+						if(params.cameraFreeSun == true){
+							if(Earth) Earth.remove(camera);
+							if(MoonThe) MoonThe.remove(camera);
+							if(Sun) Sun.add(camera);
+						}
+						if(params.cameraFreeEarth == true){
+							if(Sun) Sun.remove(camera);
+							if(MoonThe) MoonThe.remove(camera);
+							if(Earth) Earth.add(camera);
+						}
+						if(params.cameraFreeMoon == true){
+							if(Sun) Sun.remove(camera);
+							if(Earth) Earth.remove(camera);
+							if(MoonThe) MoonThe.add(camera);	
+						}
+					}
+				}//camera
+				
+				{//small screen camera views  ->  Moon_Pivot
+					view = views[1];//upper small one
+					camera = view.camera;
+					
+					{//small camera - views  
+					if(params.param_camera_MoonStill == true){//focusing exactly on the moon - taking both inclinations into account and the elipse - still moon
+						if(MoonThe){
+							Earth.remove(view.camera);
+							Sun.add(view.camera);
+							
+							setCamera(camera, cameraTarget, Moon_Pivot.position.x, Moon_Pivot.position.y, Moon_Pivot.position.z, 
+								locationMoonMatrixWorld.x, locationMoonMatrixWorld.y, locationMoonMatrixWorld.z);
+						}
+					}
+					else if(params.param_camera_EarthBehMoon == true){//focus: Earth, Moon also visible (Earth behind Moon)
+						if(MoonThe){	
+							Earth.remove(view.camera);
+							Sun.add(view.camera);
+							
+							setCamera(camera, cameraTarget, 
+								Moon_Pivot.position.x + 2.*MoonThe.position.x, Moon_Pivot.position.y + 2.*MoonThe.position.y, Moon_Pivot.position.z + 2.*MoonThe.position.z, 
+								Moon_Pivot.position.x, Moon_Pivot.position.y, Moon_Pivot.position.z);
+						}
+					}
+					else if(params.param_camera_EarthSide == true){//focus: Earth side view
+						if(Earth && Moon_Pivot){
+							Earth.remove(view.camera);
+							Sun.add(view.camera);
+							
+							setCamera(camera, cameraTarget, Moon_Pivot.position.x + 300., Moon_Pivot.position.y + 200., Moon_Pivot.position.z, 
+								Moon_Pivot.position.x, Moon_Pivot.position.y, Moon_Pivot.position.z);
+						}
+					}
+					else if(params.param_camera_EarthSun == true){//focus: Earth from Sun (Eclipse)
+						if(Earth && Moon_Pivot){
+							Earth.remove(view.camera);
+							Sun.add(view.camera);
+							
+							setCamera(camera, cameraTarget, Sun.position.x, Sun.position.y + 140., Sun.position.z, //to go a bit up - to see the shadows
+								Moon_Pivot.position.x, Moon_Pivot.position.y, Moon_Pivot.position.z);
+						}
+					}					
+					else if(params.param_camera_EarthMoon == true){//Earth from Moon
+						if(MoonThe){
+							Earth.remove(view.camera);
+							Sun.add(view.camera);
+							
+							setCamera(camera, cameraTarget, locationMoonMatrixWorld.x, locationMoonMatrixWorld.y, locationMoonMatrixWorld.z, 
+								Moon_Pivot.position.x, Moon_Pivot.position.y, Moon_Pivot.position.z);
+						}	
+					}
+					else if(params.param_camera_EarthSpace == true){//rigid direction from Earth towards the space
+						if(Earth){
+							Sun.remove(view.camera);
+							Earth.add(view.camera);
+							
+							setCamera(camera, cameraTarget, Sun.position.x + 10.0, Sun.position.y + 42.0, Sun.position.z - 2.1, //"tilt"
+								1600.0, -960.0, -350.0);//"tilt"
+						}
+					}					
+					else{//focusing on the moon - but taking only Earth's axis inclination into account - moon orbit inclination is seen (both inclinations seen here)
+						if(MoonThe){
+							Earth.remove(view.camera);
+							Sun.add(view.camera);
+							
+							setCamera(camera, cameraTarget, 
+								Moon_Pivot.position.x, Moon_Pivot.position.y, Moon_Pivot.position.z, //seeing also the Earth's inclination (Earth.position or Moon_Pivot.position)
+								Moon_Pivot.position.x + MoonThe.position.x, Moon_Pivot.position.y + MoonThe.position.y, Moon_Pivot.position.z + MoonThe.position.z);
+						}
+					}
+					}//inclination
+				}				
+				
+				//shader atributes
+				uniforms.amplitude.value = Math.sin(frame);
+				frame += 0.1;
+
+				render();
+			}
+			function render() {
+				var delta = 5 * clock.getDelta();
+				uniforms.time.value += 0.2 * delta;
+				renderer.clear();
+				
+				{//views
+					updateSize();
+				
+					view = views[0];
+					camera = view.camera;
+
+// 					view.updateCamera( camera, scene, mouseX, mouseY );
+
+					var left   = Math.floor( windowWidth  * view.left );
+					var bottom = Math.floor( windowHeight * view.bottom );
+					var width  = Math.floor( windowWidth  * view.width );
+					var height = Math.floor( windowHeight * view.height );
+					renderer.setViewport( left, bottom, width, height );
+					renderer.setScissor( left, bottom, width, height );					
+					renderer.enableScissorTest ( true );
+					renderer.setClearColor( view.background );
+
+					camera.aspect = width / height;
+					camera.updateProjectionMatrix();
+
+					renderer.render( scene, camera );
+					renderer.clearDepth();
+					renderer.render( scene2, camera );
+	
+					view = views[1];//upper small one
+					camera = view.camera;
+
+// 					view.updateCamera( camera, scene, mouseX, mouseY );
+
+					var left   = Math.floor( windowWidth  * view.left );
+					var bottom = Math.floor( windowHeight * view.bottom );
+					var width  = Math.floor( windowWidth  * view.width );
+					var height = Math.floor( windowHeight * view.height );
+					renderer.setViewport( left+2, bottom+2, width-24, height-24 );
+					renderer.setScissor( left, bottom, width-20, height-20 );
+					renderer.enableScissorTest ( true );
+					renderer.setClearColor( view.background );
+
+					camera.aspect = width / height;
+					camera.updateProjectionMatrix();
+
+					renderer.autoClear = true;//trick to have the edge on a small screen
+					renderer.render( scene, camera );
+					renderer.clearDepth();
+					renderer.autoClear = false;//trick to have the edge on a small screen
+					renderer.render( scene2, camera );
+				}
+				
+				renderer.autoClear = true;//trick to have the edge on a small screen
+				renderer.render( scene, camera );
+// 				renderer.clear();
+// 				renderer.render( scene, camera );
+				renderer.clearDepth();
+				renderer.autoClear = false;//trick to have the edge on a small screen
+				renderer.render( scene2, camera );
+			}
+			
+			function getUrlVars() {
+				var vars = {};
+				var parts = window.location.href.replace(/[?&]+([^=&]+)=([^&]*)/gi,    
+					function(m,key,value) {
+						vars[key] = value;
+					}
+				);
+				return vars;
+			}
+		</script>		
+		
+ 		<script>//main
+			{//parameters
+				var x;
+				var customWidth = getWindowDimensions().width;
+				var customHeight = getWindowDimensions().height;
+				console.log(customWidth, customHeight);
+				var camera, controls, scene, renderer;
+				var light2, spotlight; //light0, light1, 
+				var clock = new THREE.Clock();
+				var starfield, Sun, sprite, sprite2, sprite3;
+				var Earth, EarthClouds, EarthAxis, EarthOrbit;//EarthTimeZones
+				var MoonThe, MoonOrbit, MoonAxis;
+				var Earth_pivot, Moon_Pivot;
+				var axis;
+				var frame = 0;
+				var locationMoonWorld, locationMoonMatrixWorld = new THREE.Vector3();
+				var cameraTarget = new THREE.Vector3();
+				var labelWinter, labelSummer, labelSpring, labelAutumn;
+				var seasons_location = "Garching";//"Chile"
+				//Earth, Moon -> position, rotation, eigen axis update parameters
+				var rotation_speed_e = 0, rot_sp_e = 0, rotation_speed_ee = 0;
+				var rotation_speed_m = 0, rot_sp_m = 0, rotation_speed_me = 0;
+				var tempEarthRotation = 0, tempMoonRotation = 0;
+				
+				//from createOrbits
+				var radius2, width, thickness, textureRepeat, resolution, twoPI, angPerRes, y, areaOfWindow, pointSize;
+				var verts, v, geometry, particleMaterial, mesh;
+				var verts2, threshold, geometry2, pointSize2, particleMaterial2, meshB;//meshA
+				var spot1, spot2;
+				
+				var temp = 0;//for orbit_opacity
+				var orbit_opacity = 0.3;
+				var earth_orbit_color = 0x003366;
+				var moon_orbit_color = 0x3300cc;
+				var earth_axis_color = 0x0099CC;
+				var moon_axis_color = 0x9933ff;
+				
+				var obliquityMoon = -6.7*Math.PI/180;//moon obliquty 6.7
+				
+				////////////////////////////
+				var params = {//setting the parameters (not set via sliders)
+					//celestial body sizes (not variable)
+					sizeSun: 60,//6.96,
+					sizeEarth: 35,// 0.06378,
+					sizeMoon: 15, //0.01735, 
+					
+// 					//camera zoom (initialized outside params, in views definition)
+// 					views[0].camera.fov = 60;
+// 					views[0].camera.updateProjectionMatrix();
+					
+					//Earth
+					positionEarth: 75,			//only for jQuery (slider)
+					rotationEarthSun: 0,			//only for jQuery (slider)
+					distanceEarthSun: 260,//300.,//149.,	
+					rotationEarthEigen: 5,			//only for jQuery (slider)
+					inclinationEarthAxis: 23,//23.4,//30,	//only for jQuery (slider)
+					orbitEarthOn: true,			//radio buttons
+					
+					//Moon
+					positionMoon: 248,			//only for jQuery (slider)
+					rotationMoonEarth: 1,			//only for jQuery (slider)
+					distanceMoonEarth: 95,//60.,//0.384403	//slider
+					rotationMoonEigenPos: 0,		//only for jQuery (slider)
+					rotationMoonEigenVel: 0,		//only for jQuery (slider)
+					moonFacesEarth: true,
+					
+					moonInclinationAngle: 45,//5.14 	///only for jQuery (slider) - exaggerated to mostly "miss" the Sun (the sized and distances are not to scale anyway)
+					orbitMoonOn: true,			//radio buttons
+					
+					//Other
+					timeZonesOn: false,	
+					opacityOrbit: 80,			//only for jQuery (slider)
+					labelSeasons: false,			//radio buttons (setting it to true doesn't change the default radio button option of radioLabels element)
+					meshHeat: false,			//radio buttons
+					
+					//Preset (false = manual or eclipse, true = moon phases -> set in preset radio buttons, has to start as false)
+					presetTrue: false, 
+					
+					//View Center (set through radio buttons, can be changed here, but has to match the radio button state)
+					cameraFreeSun: true,
+					cameraFreeEarth: false,
+					cameraFreeMoon: false,
+					
+					//Small Screen Camera Views (set through radio buttons, can be changed here, but has to match the radio button state)
+					param_camera_EarthMoon : false,//Earth from Moon
+					param_camera_EarthSpace : false,//Earth to Space
+					param_camera_MoonStill : true,//still Moon from Earth
+					param_camera_EarthBehMoon : false,//Earth behind Moon
+					param_camera_EarthSide : false,//Earth side view
+					param_camera_EarthSun : false,//Eclipse -> Earth from Sun
+				}
+				////////////////////////////
+				
+				//eliptical (orbit) eccentricity (strech)
+				var elipse_parameter1_earth = (params.distanceEarthSun/100)*1.67;//eccentricity 1.67% of the circular distance to the Sun
+				var elipse_parameter2_earth = 0.;
+				var elipse_parameter1_moon = (params.distanceMoonEarth/100)*5.6;//eccentricity 5.6% of the circular distance to the Earth
+				var elipse_parameter2_moon = 0.;
+				var tempx, tempy, tempx2, tempy2;
+				//elipse (orbit) rotation
+				var angleElipseEarth = 12.82*Math.PI/180;//13/365*360 (21.12 Winter, 03.01. Periapsis, 13 days between) (rotation of the elipse)
+				var angleElipseMoon = 30*Math.PI/180;//not important orbit "rotates" once per 18 years
+			}//parameters
+		{//GUI text
+// 			var earth_position, moon_position;//predefined positions to show e.g. eclipse
+			{//Earth
+			if(!getUrlVars()["lang"]) {//default
+				//slider text 
+				var earth_position = "Position";
+				var earth_velocity = "Velocity";
+				//temp text variables
+				var tEarth="Earth";
+				var tEarthOrbit="&nbsp;&nbsp;&nbsp;&nbsp;Orbit";
+				var tEarthOrbitA="&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;On&nbsp;&nbsp;&nbsp;&nbsp;";
+				var tEarthOrbitB="&nbsp;&nbsp;&nbsp;&nbsp;Off&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;";
+			}
+			if(getUrlVars()["lang"] == "en") {
+				//slider text 
+				var earth_position = "Position";
+				var earth_velocity = "Velocity";
+				//temp text variables
+				var tEarth="Earth";
+				var tEarthOrbit="&nbsp;&nbsp;&nbsp;&nbsp;Orbit";
+				var tEarthOrbitA="&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;On&nbsp;&nbsp;&nbsp;&nbsp;";
+				var tEarthOrbitB="&nbsp;&nbsp;&nbsp;&nbsp;Off&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;";
+			}
+			if(getUrlVars()["lang"] == "de") {
+				//slider text 
+				var earth_position = "Position";
+				var earth_velocity = "Geschwindigkeit";
+				//temp text variables
+				var tEarth="Erde";				
+				var tEarthOrbit="&nbsp;&nbsp;&ensp;Umlaufbahn";
+				var tEarthOrbitA="&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;an&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;";//"&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Auf&nbsp;&nbsp;&nbsp;&nbsp;";
+				var tEarthOrbitB="&nbsp;&nbsp;&nbsp;&nbsp;aus&nbsp;&nbsp;&nbsp;&nbsp;";
+			}
+			//assigning temp text variables
+			document.getElementById("TextEarth").innerHTML = tEarth;
+			document.getElementById("TextEarthOrbit").innerHTML = tEarthOrbit;
+			document.getElementById("TextEarthOrbitA").innerHTML = tEarthOrbitA;
+			document.getElementById("TextEarthOrbitB").innerHTML = tEarthOrbitB;
+			}
+			
+			{//Moon
+			if(!getUrlVars()["lang"]) {//default
+				//slider text
+				var moon_position = "Position";
+				var moon_velocity = "Velocity";
+				var moon_orbit_inclination = "Inclination";//"Orbit Inclination";
+				var moon_earth_distance = "Distance";//"Moon Earth Distance";
+				//temp text variables
+				var tMoon="Moon";
+				var tMoonOrbit="&nbsp;&nbsp;&nbsp;&nbsp;Orbit";
+				var tMoonOrbitA="&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;On&nbsp;&nbsp;&nbsp;&nbsp;";
+				var tMoonOrbitB="&nbsp;&nbsp;&nbsp;&nbsp;Off&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;";
+			}
+			if(getUrlVars()["lang"] == "en") {
+				//slider text
+				var moon_position = "Position";
+				var moon_velocity = "Velocity";
+				var moon_orbit_inclination = "Inclination";//"Orbit Inclination";
+				var moon_earth_distance = "Distance";//"Moon Earth Distance";
+				//temp text variables
+				var tMoon="Moon";
+				var tMoonOrbit="&nbsp;&nbsp;&nbsp;&nbsp;Orbit";
+				var tMoonOrbitA="&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;On&nbsp;&nbsp;&nbsp;&nbsp;";
+				var tMoonOrbitB="&nbsp;&nbsp;&nbsp;&nbsp;Off&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;";				
+			}
+			if(getUrlVars()["lang"] == "de") {
+				//slider text
+				var moon_position = "Position";
+				var moon_velocity = "Geschwindigkeit";
+				var moon_orbit_inclination = "Neigung";//"Orbit Inclination";
+				var moon_earth_distance = "Entfernung";//"Moon Earth Distance";
+				//temp text variables
+				var tMoon="Mond";
+				var tMoonOrbit="&nbsp;&nbsp;&ensp;Umlaufbahn";
+				var tMoonOrbitA="&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;an&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;";//"&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Auf&nbsp;&nbsp;&nbsp;&nbsp;";
+				var tMoonOrbitB="&nbsp;&nbsp;&nbsp;&nbsp;aus&nbsp;&nbsp;&nbsp;&nbsp;";				
+			}
+			//assigning temp text variables
+			document.getElementById("TextMoon").innerHTML = tMoon;
+			document.getElementById("TextMoonOrbit").innerHTML = tMoonOrbit;
+			document.getElementById("TextMoonOrbitA").innerHTML = tMoonOrbitA;
+			document.getElementById("TextMoonOrbitB").innerHTML = tMoonOrbitB;			
+			}
+			
+			{//Various
+			//slider text
+			var moon_eaxis_position = "Moon Eigen Axis Position";
+			var moon_eaxis_velocity = "Moon Eigen Axis Velocity";
+			var orbit_opacity_t = "Orbit Opacity";
+			var earth_eaxis_rot_vel = "Earth Eigen Axis Rotation Velocity";
+			var earth_axial_tilt = "Earth Axial Tilt";
+			
+			
+			//temp text variables + assigning temp text variables
+			var tEarthHeatImpact="&ensp;&ensp;&nbsp;Earth Heat";
+			var tEarthHeatImpactA="&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;On&nbsp;&nbsp;&nbsp;&nbsp;";
+			var tEarthHeatImpactB="&nbsp;&nbsp;&nbsp;&nbsp;Off&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;";
+			document.getElementById("TextEarthHeatImpact").innerHTML = tEarthHeatImpact;
+			document.getElementById("TextEarthHeatImpactA").innerHTML = tEarthHeatImpactA;
+			document.getElementById("TextEarthHeatImpactB").innerHTML = tEarthHeatImpactB;
+			
+			var tSeasonLabels="&ensp;&ensp;&nbsp;Season Labels";
+			var tSeasonLabelsA="&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;On&nbsp;&nbsp;&nbsp;&nbsp;";
+			var tSeasonLabelsB="&nbsp;&nbsp;&nbsp;&nbsp;Off&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;";
+			var tSeasonHemisphere="&nbsp;&emsp;&emsp;&emsp;&emsp;&emsp;Hemisphere";
+			document.getElementById("TextSeasonLabels").innerHTML = tSeasonLabels;
+			document.getElementById("TextSeasonLabelsA").innerHTML = tSeasonLabelsA;
+			document.getElementById("TextSeasonLabelsB").innerHTML = tSeasonLabelsB;	
+			document.getElementById("TextSeasonHemisphere").innerHTML = tSeasonHemisphere;
+			
+// 			document.getElementById("TextEarthTimeZones").innerHTML = "&ensp;&ensp;&nbsp;Time Zones";
+// 			document.getElementById("TextEarthTimeZonesA").innerHTML = tEarthHeatImpactA;
+// 			document.getElementById("TextEarthTimeZonesB").innerHTML = tEarthHeatImpactB;	
+			}
+			
+			{//squashing the english setup
+			if(!getUrlVars()["lang"] || getUrlVars()["lang"] == "en"){
+				//Earth
+				document.getElementById("circleEarth").style.width = "316px";
+				document.getElementById("circleEarth").style.right = "18px";
+				document.getElementById("amountEarthPosition").style.width = "88px";
+				document.getElementById("amountEarthVelocity").style.width = "88px";
+				
+				//Moon
+				document.getElementById("circleMoon").style.width = "316px";
+				document.getElementById("circleMoon").style.right = "18px";
+				document.getElementById("amountMoonPosition").style.width = "88px";
+				document.getElementById("amountMoonVelocity").style.width = "88px";
+				document.getElementById("amountMoonOrbitInclination").style.width = "88px";
+				document.getElementById("amountMoonEarthDistance").style.width = "88px";
+			}
+			}			
+		}//GUI text
+			{//views
+			var windowWidth, windowHeight;
+			var views = [
+				{//large one
+					left: 0.0,//x
+					bottom: 0.0,//y
+					width: 1.15,//"moving it" right
+					height: 1.0,
+					background: new THREE.Color().setRGB( 0.5, 0.5, 0.7 ),
+					eye: [ -300, 500, 300 ],
+					up: [ 0, 1, 0 ],
+					fov: 60,
+				},	
+				{ //small one
+					left: 0.010,
+					bottom: 0.466,	
+					width: 0.3*0.85,
+					height: 0.63*0.85,
+					background: new THREE.Color().setRGB( 0.0, 119/255.0, 190/255.0 ),
+					eye: [ 0, 0, 700 ],
+					up: [ 0, 1, 0 ],
+					fov: 65,//45//65
+				}
+			];//view
+			}
+			{//load images
+			var texture_starfield = THREE.ImageUtils.loadTexture( 'Images/Milky2k_flipped.jpg');////flipped (correctly oriented in the code)
+			
+			var texture_shader_star1 =  THREE.ImageUtils.loadTexture( "Images/tex_cloud.png" );
+			var texture_shader_star2 =  THREE.ImageUtils.loadTexture( "Images/tex_lava.jpg" );
+			var texture_Sun_Sprite = THREE.ImageUtils.loadTexture( 'Images/tex_sprite.png');
+			var texture_Sun_sprite2 = THREE.ImageUtils.loadTexture('Images/tex_sprite2.png');
+
+			var texture_Earth = THREE.ImageUtils.loadTexture( 'Images/earth_marked.png');
+ 			var texture_Earth_bumpmap = THREE.ImageUtils.loadTexture( 'Images/earth_elevation.jpg');
+			var texture_Earth_specularmap = THREE.ImageUtils.loadTexture( 'Images/earth_specular.jpg');
+			var texture_Earth_Cloud = THREE.ImageUtils.loadTexture( 'Images/earth_clouds_trans.png');
+			var texture_Earth_Heat = THREE.ImageUtils.loadTexture( 'Images/tex_heat.png');
+// 			var texture_time_zones = THREE.ImageUtils.loadTexture( 'Images/worldtime4.png');
+			
+			var texture_Moon = THREE.ImageUtils.loadTexture( 'Images/moon_marked.png');
+			
+			var texture_orbit_sprite = texture_Sun_Sprite;
+			
+			//menu
+			var radio_button_WH = 110;
+			var image_view_earth_moon 		= 'Images/Icons/icon_view_earth_moon.png';
+			var image_view_moon_earth 		= 'Images/Icons/icon_view_moon_earth.png';
+			var image_view_earth_side 		= 'Images/Icons/icon_view_earth_side.png';
+			var image_view_sun_earth 		= 'Images/Icons/icon_view_sun_earth.png';
+			var image_view_earth_space 		= 'Images/Icons/icon_view_earth_space.png';
+			var image_view_moon_earth2 		= 'Images/Icons/icon_view_moon_earth2.png';
+			var image_view_earth_moon2 		= 'Images/Icons/icon_view_earth_moon2.png';
+			
+			var image_center_sun 			= 'Images/Icons/icon_center_sun.png';
+			var image_center_earth 			= 'Images/Icons/icon_center_earth.png';
+			var image_center_moon 			= 'Images/Icons/icon_center_moon.png';
+			
+			var image_preset_manual 		= 'Images/Icons/icon_preset_manual.png';
+			var image_preset_phases 		= 'Images/Icons/icon_preset_phases.png';
+			var image_preset_eclipse 		= 'Images/Icons/icon_preset_eclipse.png';
+			}
+			{//materials i.e. textures
+				var starfield_material  = new THREE.MeshBasicMaterial( { map: texture_starfield,  side: THREE.BackSide });				
+				var earth_axis_material = new THREE.MeshBasicMaterial( {wireframe:false,  color: earth_axis_color } );
+				var moon_axis_material = new THREE.MeshBasicMaterial( {wireframe:false,  color: moon_axis_color } );
+				var material = new THREE.MeshBasicMaterial( {wireframe:true,  color: 0x303030 } );
+				var material_Earth_Heat = new THREE.MeshPhongMaterial( {map: texture_Earth_Heat, transparent: true, opacity: 1.0 , shininess: 0} );
+				//bumpmap, specularmap, normalmap etc.
+				texture_Earth_bumpmap.anisotropy = 4;
+				
+// 				var material_Earth_Time_Zones = new THREE.MeshBasicMaterial( {map: texture_time_zones, transparent: true, opacity: 1.0 } );
+				
+				var material_Earth = new THREE.MeshPhongMaterial( { color: 0xffffff, 
+					map: texture_Earth, 
+					bumpMap: texture_Earth_bumpmap, bumpScale: 1.9,//-1.0,
+					specularMap: texture_Earth_specularmap, 
+					specular: 0x404040 , //bright
+					shininess: 0,
+					transparent : false,
+					opacity     : 1.0,
+				});
+// 				renderer.shadowMapEnabled = true;
+// 				renderer.shadowMapSoft = true;
+// 				renderer.shadowMapCullFrontFaces = false;
+// 				renderer.shadowMapCullFace = THREE.CullFaceBack;//makes the shadow not "shine" through the back
+				
+				var material_Earth_Cloud = new THREE.MeshLambertMaterial({
+					map: texture_Earth_Cloud,
+					transparent: true,
+					depthWrite: false, 
+					opacity     : 0.9,
+				});
+				
+				var material_Moon = new THREE.MeshPhongMaterial( {
+					map: texture_Moon,
+					bumpMap: texture_Moon, bumpScale: 0.3,//-1.0,
+					shininess: 1
+				} );
+			}//materials			
+			{//shader materials
+				var uniforms = {
+					time: { type: "f", value: 1.0 },
+ 					resolution: { type: "v2", value: new THREE.Vector2() },//not used
+					texture1: { type: "t", value: texture_shader_star1},
+					texture2: { type: "t", value: texture_shader_star2 },
+					amplitude: { type: 'f', value: 0 }//not used
+				};
+				uniforms.texture1.value.wrapS = uniforms.texture1.value.wrapT = THREE.RepeatWrapping;
+				uniforms.texture2.value.wrapS = uniforms.texture2.value.wrapT = THREE.RepeatWrapping;	
+				var materialSun = new THREE.ShaderMaterial( {
+					uniforms: uniforms, 
+ 					vertexShader: document.getElementById( 'vertexShaderStar' ).textContent,
+ 					fragmentShader: document.getElementById( 'fragmentShaderStar' ).textContent
+				} );
+			}
+				
+			window.onload = function () {
+				x = InitThreeRenderer(customWidth, customHeight, container);
+				x = InitThreeScene();
+				x = InitThreeLights();
+				x = InitCameras();
+				
+				x = InitEnviromentSphere();
+				x = InitObjects();
+				
+// 				updateEarth();
+// 				updateMoon();//only this updates the orbits
+				
+				AddListeners();
+				animate();
+			}// window.onload
+		</script>
+
+		<script>//jquery GUI
+		$("body").on("contextmenu", "img", function(e) {return false;});//prevents the context menu (blocked in kiosk)
+		
+		var e = $.elements = {};
+		e.scaleX = params.positionEarth;//75;//Earth Position
+		e.scaleX2 = params.positionMoon;//248;//Moon Position
+		e.scaleX3 = params.rotationEarthSun;//0;//Earth Velocity
+		e.scaleX4 = params.opacityOrbit;//80;//Orbit Opacity
+		e.scaleX5 = params.rotationEarthEigen;//5;//10;//Earth Eigen Axis Rotation
+		e.scaleX6 = params.inclinationEarthAxis;//23;//23.4;//Earth Axial Tilt
+		e.scaleX7 = params.rotationMoonEarth;//1;//Moon Velocity
+		e.scaleX8 = params.rotationMoonEigenPos;//0;//Moon Eigen Axis Rotation Position
+		e.scaleX8b = params.rotationMoonEigenVel;//0;//Moon Eigen Axis Rotation Velocity
+		e.scaleX9 = params.moonInclinationAngle;//45;//5;//Moon Orbit Inclination
+		e.scaleX10 = params.distanceMoonEarth;//95;//Moon Earth Distance
+		
+		$(document).ready(function(){
+			console.log("ready");
+			document.body.style.visibility = "visible";
+			
+			{//sliderEarthPosition (Earth Position) (4 preset positions)
+			$( "#sliderEarthPosition" )
+			.text("") // sets text to empty
+			.slider({
+				range: "min",
+				min: 0,
+				max: 360,//360+75
+				step: 1,
+				slide: function( event, ui ) {
+// 					e.scaleX = ui.value;
+// 					$( '#amountEarthPosition' ).val(  earth_position );
+
+					//snap to 4 predefined positons (Spring, Summer, Autumn, Winter)
+					if( ui.value < 100) ui.value=75;//Summer
+					if( ui.value >= 100 && ui.value < 200) ui.value=176;//Autumn
+					if( ui.value >= 200 && ui.value < 300) ui.value=259;//Winter
+					if( ui.value >= 300) ui.value=338;//Spring
+					e.scaleX = ui.value;
+					$( '#amountEarthPosition' ).val( earth_position );
+				},
+				value: e.scaleX
+			})
+			.mouseenter(function(){
+				controls.noRotate = true;
+				document.onmousemove = null;//to not interfere with the dragging
+			})
+			.mouseleave(function(){
+				controls.noRotate = false;
+				document.onmousemove = _move_elem;//to not interfere with the dragging
+			})	
+			
+			$( '#amountEarthPosition' ).val( earth_position );
+			$( '#amountEarthPosition' )
+			.mouseenter(function(){
+				document.onmousemove = null;//to not interfere with the dragging
+			})
+			.mouseleave(function(){
+				document.onmousemove = _move_elem;//to not interfere with the dragging
+			});
+			}
+			
+			{//sliderMoonPosition (Moon Position) (4 preset values)
+			$( "#sliderMoonPosition" )
+			.text("") // sets text to empty
+			.slider({
+				range: "min",
+				min: 0,
+				max: 360,//360+75
+				step: 1,
+				slide: function( event, ui ) {
+// 					e.scaleX2 = ui.value;
+// 					$( "#amountMoonPosition" ).val(  moon_position);
+					
+					//snap to 4 predefined positons (Spring, Summer, Autumn, Winter)
+					if( ui.value < 100) ui.value=49;//Winter Eclipse
+					if( ui.value >= 100 && ui.value < 200) ui.value=168;//Spring no Eclipse
+					if( ui.value >= 200 && ui.value < 300) ui.value=248;//Summer Eclipse
+					if( ui.value >= 300) ui.value=314;//Autumn no eclipse
+					e.scaleX2 = ui.value;
+					$( '#amountMoonPosition' ).val( moon_position );					
+				},
+				value: e.scaleX2
+			})
+			.mouseenter(function(){
+				controls.noRotate = true;
+				document.onmousemove = null;//to not interfere with the dragging
+			})
+			.mouseleave(function(){
+				controls.noRotate = false;
+				document.onmousemove = _move_elem;//to not interfere with the dragging
+			})
+			
+			$( "#amountMoonPosition" ).val( moon_position );
+			$( "#amountMoonPosition" )
+			.mouseenter(function(){
+				document.onmousemove = null;//to not interfere with the dragging
+			})
+			.mouseleave(function(){
+				document.onmousemove = _move_elem;//to not interfere with the dragging
+			});			
+			}
+			
+			{//sliderEarthVelocity (Earth Velocity)
+			$( "#sliderEarthVelocity" )
+			.text("") // sets text to empty
+			.slider({
+				range: "min",
+				min: 0,
+				max: 18,//360+75 (3 states: stop, slow, fast)
+				step: 1,
+				slide: function( event, ui ) {
+					e.scaleX3 = ui.value;
+					$( '#amountEarthVelocity' ).val( earth_velocity );
+				},
+				value: e.scaleX3
+			})
+			.mouseenter(function(){
+				controls.noRotate = true;
+				document.onmousemove = null;//to not interfere with the dragging
+			})
+			.mouseleave(function(){
+				controls.noRotate = false;
+				document.onmousemove = _move_elem;//to not interfere with the dragging
+			})
+
+			$( '#amountEarthVelocity' ).val( earth_velocity );
+			$( '#amountEarthVelocity' )
+			.mouseenter(function(){
+				document.onmousemove = null;//to not interfere with the dragging
+			})
+			.mouseleave(function(){
+				document.onmousemove = _move_elem;//to not interfere with the dragging
+			});			
+			}			
+			
+			{//sliderOrbitOpacity (Orbit Opacity)
+			$( "#sliderOrbitOpacity" )
+			.text("") // sets text to empty
+			.slider({
+				range: "min",
+				min: 0,
+				max: 100,//360+75
+				step: 1,
+				slide: function( event, ui ) {
+					e.scaleX4 = ui.value;
+// 					$( "#amountOrbitOpacity" ).val(  ui.value + "   Orbit Opacity");
+					$( "#amountOrbitOpacity" ).val( orbit_opacity_t );
+				},
+				value: e.scaleX4
+			})
+			.mouseenter(function(){
+				controls.noRotate = true;
+				document.onmousemove = null;//to not interfere with the dragging
+			})
+			.mouseleave(function(){
+				controls.noRotate = false;
+				document.onmousemove = _move_elem;//to not interfere with the dragging
+			})
+			
+// 			$( "#amountOrbitOpacity" ).val( $( "#sliderOrbitOpacity" ).slider( "value" ) + "   Orbit Opacity");
+			$( "#amountOrbitOpacity" ).val( orbit_opacity_t );
+			$( "#amountOrbitOpacity" )
+			.mouseenter(function(){
+				document.onmousemove = null;//to not interfere with the dragging
+			})
+			.mouseleave(function(){
+				document.onmousemove = _move_elem;//to not interfere with the dragging
+			});
+			}
+			
+			{//sliderEarthEigen (Earth Eigen Axis Rotation)
+			$( "#sliderEarthEigen" )
+			.text("") // sets text to empty
+			.slider({
+				range: "min",
+				min: 0,
+				max: 100,//360+75
+				step: 1,
+				slide: function( event, ui ) {
+					e.scaleX5 = ui.value;
+// 					$( "#amountEarthEigen" ).val(  ui.value + "   Earth Eigen Axis Velocity");
+					$( "#amountEarthEigen" ).val( earth_eaxis_rot_vel );
+				},
+				value: e.scaleX5
+			})
+			.mouseenter(function(){
+				controls.noRotate = true;
+				document.onmousemove = null;//to not interfere with the dragging
+			})
+			.mouseleave(function(){
+				controls.noRotate = false;
+				document.onmousemove = _move_elem;//to not interfere with the dragging
+			})
+			
+// 			$( "#amountEarthEigen" ).val( $( "#sliderEarthEigen" ).slider( "value" ) + "   Earth Eigen Axis Velocity");
+			$( "#amountEarthEigen" ).val( earth_eaxis_rot_vel );
+			$( "#amountEarthEigen" )
+			.mouseenter(function(){
+				document.onmousemove = null;//to not interfere with the dragging
+			})
+			.mouseleave(function(){
+				document.onmousemove = _move_elem;//to not interfere with the dragging
+			});			
+			}						
+			
+			{//sliderEarthAxialTilt (Earth Axial Tilt)
+			$( "#sliderEarthAxialTilt" )
+			.text("") // sets text to empty
+			.slider({
+				range: "min",
+				min: -180,
+				max: 180,//360+75
+				step: 1,
+				slide: function( event, ui ) {
+					e.scaleX6 = ui.value;
+// 					$( "#amountEarthAxialTilt" ).val(  ui.value + "   Earth Axial Tilt");
+					$( "#amountEarthAxialTilt" ).val( earth_axial_tilt );
+				},
+				value: e.scaleX6
+			})
+			.mouseenter(function(){
+				controls.noRotate = true;
+				document.onmousemove = null;//to not interfere with the dragging
+			})
+			.mouseleave(function(){
+				controls.noRotate = false;
+				document.onmousemove = _move_elem;//to not interfere with the dragging
+			})
+			
+// 			$( "#amountEarthAxialTilt" ).val( $( "#sliderEarthAxialTilt" ).slider( "value" ) + "   Earth Axial Tilt");
+			$( "#amountEarthAxialTilt" ).val( earth_axial_tilt );
+			$( "#amountEarthAxialTilt" )
+			.mouseenter(function(){
+				document.onmousemove = null;//to not interfere with the dragging
+			})
+			.mouseleave(function(){
+				document.onmousemove = _move_elem;//to not interfere with the dragging
+			});	
+			}	
+			
+			{//sliderMoonVelocity (Moon Velocity)
+			$( "#sliderMoonVelocity" )
+			.text("") // sets text to empty
+			.slider({
+				range: "min",
+				min: 0,
+				max: 18,//360+75 (3 states: stop, slow, fast)
+				step: 1,
+				slide: function( event, ui ) {
+					e.scaleX7 = ui.value;
+// 					$( "#amountMoonVelocity" ).val(  ui.value + "   Moon Velocity");
+					$( "#amountMoonVelocity" ).val( moon_velocity );
+				},
+				value: e.scaleX7
+			})
+			.mouseenter(function(){
+				controls.noRotate = true;
+				document.onmousemove = null;//to not interfere with the dragging
+			})
+			.mouseleave(function(){
+				controls.noRotate = false;
+				document.onmousemove = _move_elem;//to not interfere with the dragging
+			})
+			
+// 			$( "#amountMoonVelocity" ).val( $( "#sliderMoonVelocity" ).slider( "value" ) + "   Moon Velocity");	
+			$( "#amountMoonVelocity" ).val( moon_velocity );	
+			$( "#amountMoonVelocity" )
+			.mouseenter(function(){
+				document.onmousemove = null;//to not interfere with the dragging
+			})
+			.mouseleave(function(){
+				document.onmousemove = _move_elem;//to not interfere with the dragging
+			});
+			}				
+			
+			{//sliderMoonEigen (Moon Eigen Axis Rotation Position & Velocity) (2x slider)
+			$( "#sliderMoonEigen" )
+			.text("") // sets text to empty
+			.slider({
+				range: "min",
+				min: 0,
+				max: 360, 
+				step: 1,
+				slide: function( event, ui ) {
+					e.scaleX8 = ui.value;
+// 					$( "#amountMoonEigen" ).val(  ui.value + "   Moon Eigen Axis Position"); 
+					//turn off the "Moon Faces Earth" option
+					$( "#amountMoonEigen" ).val( moon_eaxis_position );					
+				},
+				value: e.scaleX8
+			})
+			.mouseenter(function(){
+				controls.noRotate = true;
+				document.onmousemove = null;//to not interfere with the dragging
+			})
+			.mouseleave(function(){
+				controls.noRotate = false;
+				document.onmousemove = _move_elem;//to not interfere with the dragging
+			})
+			
+// 			$( "#amountMoonEigen" ).val( $( "#sliderMoonEigen" ).slider( "value" ) + "   Moon Eigen Axis Position");
+			$( "#amountMoonEigen" ).val( moon_eaxis_position );
+// 			$( "#sliderMoonEigen " ).slider({max:360});
+			$( "#amountMoonEigen" )
+			.mouseenter(function(){
+				document.onmousemove = null;//to not interfere with the dragging
+			})
+			.mouseleave(function(){
+				document.onmousemove = _move_elem;//to not interfere with the dragging
+			});
+			
+			
+			$( "#sliderMoonEigen2" )//Moon Eigen Axis Rotation Velocity
+			.text("") // sets text to empty
+			.slider({
+				range: "min",
+				min: 0,
+				max: 18,//100
+				step: 1,
+				slide: function( event, ui ) {
+					e.scaleX8b = ui.value;
+// 					$( "#amountMoonEigen2" ).val(  ui.value + "   Moon Eigen Axis Velocity");
+					$( "#amountMoonEigen2" ).val( moon_eaxis_velocity );
+				},
+				value: e.scaleX8b
+			})
+			.mouseenter(function(){
+				controls.noRotate = true;
+				document.onmousemove = null;//to not interfere with the dragging
+			})
+			.mouseleave(function(){
+				controls.noRotate = false;
+				document.onmousemove = _move_elem;//to not interfere with the dragging
+			})			
+			
+// 			$( "#amountMoonEigen2" ).val( $( "#sliderMoonEigen2" ).slider( "value" ) + "   Moon Eigen Axis Velocity");
+			$( "#amountMoonEigen2" ).val( moon_eaxis_velocity );
+			$( "#amountMoonEigen2" )
+			.mouseenter(function(){
+				document.onmousemove = null;//to not interfere with the dragging
+			})
+			.mouseleave(function(){
+				document.onmousemove = _move_elem;//to not interfere with the dragging
+			});
+			}				
+			
+			{//sliderMoonOrbitInclination (Moon Orbit Inclination)
+			$( "#sliderMoonOrbitInclination" )
+			.text("") // sets text to empty
+			.slider({
+				range: "min",
+				min: 0,
+				max: 360,//360+75
+				step: 1,
+				slide: function( event, ui ) {
+					e.scaleX9 = ui.value;
+// 					$( "#amountMoonOrbitInclination" ).val(  ui.value + "   Moon Orbit Inclination");
+					$( "#amountMoonOrbitInclination" ).val( moon_orbit_inclination );
+					//turn of the "Moon Faces Earth" option
+				},
+				value: e.scaleX9
+			})
+			.mouseenter(function(){
+				controls.noRotate = true;
+				document.onmousemove = null;//to not interfere with the dragging
+			})
+			.mouseleave(function(){
+				controls.noRotate = false;
+				document.onmousemove = _move_elem;//to not interfere with the dragging
+			})
+			
+// 			$( "#amountMoonOrbitInclination" ).val( $( "#sliderMoonOrbitInclination" ).slider( "value" ) + "   Moon Orbit Inclination");
+			$( "#amountMoonOrbitInclination" ).val( moon_orbit_inclination );
+			$( "#amountMoonOrbitInclination" )
+			.mouseenter(function(){
+				document.onmousemove = null;//to not interfere with the dragging
+			})
+			.mouseleave(function(){
+				document.onmousemove = _move_elem;//to not interfere with the dragging
+			});	
+			}						
+			
+			{//sliderMoonEarthDistance (Moon Earth Distance)
+			$( "#sliderMoonEarthDistance" )
+			.text("") // sets text to empty
+			.slider({
+				range: "min",
+				min: 75,
+				max: 115,//360+75
+				step: 1,
+				slide: function( event, ui ) {
+					e.scaleX10 = ui.value;//distanceMoonEarth: 95,
+// 					$( "#amountMoonEarthDistance" ).val(  ui.value + "   Moon Earth Distance");
+					$( "#amountMoonEarthDistance" ).val( moon_earth_distance );
+					//turn of the "Moon Faces Earth" option
+				},
+				value: e.scaleX10
+			})
+			.mouseenter(function(){
+				controls.noRotate = true;
+				document.onmousemove = null;//to not interfere with the dragging
+			})
+			.mouseleave(function(){
+				controls.noRotate = false;
+				document.onmousemove = _move_elem;//to not interfere with the dragging
+			})
+			
+// 			$( "#amountMoonEarthDistance" ).val( $( "#sliderMoonEarthDistance" ).slider( "value" ) + "   Moon Earth Distance");	
+			$( "#amountMoonEarthDistance" ).val( moon_earth_distance );		
+			$( "#amountMoonEarthDistance" )
+			.mouseenter(function(){
+				document.onmousemove = null;//to not interfere with the dragging
+			})
+			.mouseleave(function(){
+				document.onmousemove = _move_elem;//to not interfere with the dragging
+			});
+			}
+			
+			
+			
+			{//radio buttons (Earth Orbit)
+			$( "#radioOrbitEarth" ).buttonset()
+			.mouseenter(function(){
+				document.onmousemove = null;//to not interfere with the dragging
+			})
+			.mouseleave(function(){
+				document.onmousemove = _move_elem;//to not interfere with the dragging
+			});
+			
+			$('#radioOrbitEarth input').on('change', function() {
+				var radioID = $('input[name="radio5options"]:checked')[0].id;
+
+				if(radioID == "radio5a") {
+					params.orbitEarthOn = true;
+					updateOrbits();
+				}
+				if(radioID == "radio5b") {
+					params.orbitEarthOn = false;
+					updateOrbits();
+				}
+			});
+			}						
+			
+			{//radio buttons (Moon Orbit)
+			$( "#radioOrbitMoon" ).buttonset()
+			.mouseenter(function(){
+				document.onmousemove = null;//to not interfere with the dragging
+			})
+			.mouseleave(function(){
+				document.onmousemove = _move_elem;//to not interfere with the dragging
+			});			
+			
+			$('#radioOrbitMoon input').on('change', function() {
+				var radioID = $('input[name="radio6options"]:checked')[0].id;
+
+				if(radioID == "radio6a") {
+					params.orbitMoonOn = true;
+					updateOrbits();
+				}
+				if(radioID == "radio6b") {
+					params.orbitMoonOn = false;
+					updateOrbits();
+				}
+			});			
+			}
+			
+			{//radio buttons (Earth Heat Mesh)
+			$( "#radioHeat" ).buttonset()
+			.mouseenter(function(){
+				document.onmousemove = null;//to not interfere with the dragging
+			})
+			.mouseleave(function(){
+				document.onmousemove = _move_elem;//to not interfere with the dragging
+			});			
+			
+			$('#radioHeat input').on('change', function() {
+				var radioID = $('input[name="radio2options"]:checked')[0].id;
+				if(radioID == "radio2a") {
+					params.meshHeat = true;
+					if(Earth) updateEarth();
+				}
+				if(radioID == "radio2b") {
+					params.meshHeat = false;
+					if(Earth) updateEarth();
+				}
+			});			
+			}
+			
+			{//radio buttons (Earth Time Zones)
+			$( "#radioTime" ).buttonset()
+			.mouseenter(function(){
+				document.onmousemove = null;//to not interfere with the dragging
+			})
+			.mouseleave(function(){
+				document.onmousemove = _move_elem;//to not interfere with the dragging
+			});			
+			
+			$('#radioTime input').on('change', function() {
+				var radioID = $('input[name="radio3options"]:checked')[0].id;
+				if(radioID == "radio3a") {
+					params.timeZonesOn = true;
+					if(Earth) updateEarth();
+				}
+				if(radioID == "radio3b") {
+					params.timeZonesOn = false;
+					if(Earth) updateEarth();
+				}
+			});			
+			}			
+			
+			{//radio buttons (Earth Season Labels)
+			$( "#radioLabels" ).buttonset()
+			.mouseenter(function(){
+				document.onmousemove = null;//to not interfere with the dragging
+			})
+			.mouseleave(function(){
+				document.onmousemove = _move_elem;//to not interfere with the dragging
+			});			
+			
+			$('#radioLabels input').on('change', function() {
+				var radioID = $('input[name="radio4options"]:checked')[0].id;
+
+				if(radioID == "radio4a") {
+					$('#radioLocation').show();
+					
+					params.labelSeasons = true;
+					if(Earth) updateEarth();
+					
+					$('#radioLocation').buttonset({ disabled: false });//Location
+// // 					$('#radioLocation').removeClass('ui-button-disabled ui-state-disabled');//to not dim the buttons 
+// 					document.getElementById("radioLocation").style.background = "rgba(128,256,128,0.5)";//Earth Position (green background)
+// // 					$('#radioLocation').buttonset("refresh");
+					$('#radio4a').trigger('click');					
+				}
+				if(radioID == "radio4b") {
+					params.labelSeasons = false;
+					if(Earth) updateEarth();
+					
+					$('#radioLocation').buttonset({ disabled: true });//Location
+					$('#radioLocation').removeClass('ui-button-disabled ui-state-disabled');//to not dim the buttons 
+// 					document.getElementById("radioLocation").style.background = "rgba(256,128,128,0.5)";//Earth Position (red background)
+// // 					$('#radioLocation').buttonset("refresh");
+					$('#radio4b').trigger('click');
+					
+					$('#radioLocation').hide();
+				}
+			});
+			}						
+			
+			{//radio buttons (Earth Season Hemisphere) 
+			$( "#radioLocation" ).buttonset()
+			.mouseenter(function(){
+				document.onmousemove = null;//to not interfere with the dragging
+			})
+			.mouseleave(function(){
+				document.onmousemove = _move_elem;//to not interfere with the dragging
+			});			
+			
+			$('#radioLocation input').on('change', function() {
+				var radioID = $('input[name="radio10options"]:checked')[0].id;
+
+				if(radioID == "radio10a") {//Garching (Northern Hemisphere)
+					seasons_location = "Garching";
+					InitLabels();
+				}
+				if(radioID == "radio10b") {//Chile (Southern Hemisphere)
+					seasons_location = "Chile";
+					InitLabels();
+				}
+			});			
+			}	
+			
+			{//radio buttons (Earth Axial Tilt) - not used here (if Earth Axial Tilt is visible it can be used, regardless of the season labels being wrong... )
+			//was: #radioEarthAxialTilt, radio11a (Free), radio11b (Fixed)
+			}
+			
+			
+			{//radio buttons (Small Camera)
+			$( "#radio" ).buttonset();
+			
+			$('#radio input').on('change', function() {
+				var radioID = $('input[name="radio"]:checked', '#radio')[0].id;
+
+				if(radioID == "radio1") {//Moon from Earth (still)
+					params.param_camera_EarthMoon = false;//Earth from Moon
+					params.param_camera_EarthSpace = false;//Earth to Space
+					params.param_camera_MoonStill = true;//still moon
+					params.param_camera_EarthBehMoon = false;//Earth behind Moon
+					params.param_camera_EarthSide = false;//Earth Side View
+					params.param_camera_EarthSun = false;//Eclipse -> Earth from Sun		
+				}
+				if(radioID == "radio2") {//Earth Side View
+					params.param_camera_EarthMoon = false;//Earth from Moon
+					params.param_camera_EarthSpace = false;//Earth to Space
+					params.param_camera_MoonStill = false;//still moon
+					params.param_camera_EarthBehMoon = false;//Earth behind Moon
+					params.param_camera_EarthSide = true;//Earth Side View
+					params.param_camera_EarthSun = false;//Eclipse -> Earth from Sun							
+				}
+				if(radioID == "radio3") {//Earth from above Sun
+					params.param_camera_EarthMoon = false;//Earth from Moon
+					params.param_camera_EarthSpace = false;//Earth to Space
+					params.param_camera_MoonStill = false;//still moon
+					params.param_camera_EarthBehMoon = false;//Earth behind Moon
+					params.param_camera_EarthSide = false;//Earth Side View
+					params.param_camera_EarthSun = true;//Eclipse -> Earth from Sun							
+				}				
+				if(radioID == "radio4") {//Earth from Moon
+					params.param_camera_EarthMoon = true;//Earth from Moon
+					params.param_camera_EarthSpace = false;//Earth to Space
+					params.param_camera_MoonStill = false;//still moon
+					params.param_camera_EarthBehMoon = false;//Earth behind Moon
+					params.param_camera_EarthSide = false;//Earth Side View
+					params.param_camera_EarthSun = false;//Eclipse -> Earth from Sun							
+				}
+				if(radioID == "radio5") {//Earth to Space
+					params.param_camera_EarthMoon = false;//Earth from Moon
+					params.param_camera_EarthSpace = true;//Earth to Space
+					params.param_camera_MoonStill = false;//still moon
+					params.param_camera_EarthBehMoon = false;//Earth behind Moon
+					params.param_camera_EarthSide = false;//Earth Side View
+					params.param_camera_EarthSun = false;//Eclipse -> Earth from Sun		
+				}
+				if(radioID == "radio6") {//Earth behind Moon
+					params.param_camera_EarthMoon = false;//Earth from Moon
+					params.param_camera_EarthSpace = false;//Earth to Space
+					params.param_camera_MoonStill = false;//still moon
+					params.param_camera_EarthBehMoon = true;//Earth behind Moon
+					params.param_camera_EarthSide = false;//Earth Side View
+					params.param_camera_EarthSun = false;//Eclipse -> Earth from Sun		
+				}				
+				if(radioID == "radio7") {//Moon from Earth (not still - axis inclination visible)
+					params.param_camera_EarthMoon = false;//Earth from Moon
+					params.param_camera_EarthSpace = false;//Earth to Space
+					params.param_camera_MoonStill = false;//still moon
+					params.param_camera_EarthBehMoon = false;//Earth behind Moon
+					params.param_camera_EarthSide = false;//Earth
+					params.param_camera_EarthSun = false;//Eclipse -> Earth from Sun		
+				}								
+			});
+			}//radio
+			
+			{//radio buttons (View Center) 
+			$( "#radioViewCenter" ).buttonset();
+			
+			$('#radioViewCenter input').on('change', function() {
+				var radioID = $('input[name="radio8options"]:checked')[0].id;
+
+				if(radioID == "radio8a") {
+					params.cameraFreeSun = true;
+					params.cameraFreeEarth = false;
+					params.cameraFreeMoon = false;
+				}
+				if(radioID == "radio8b") {
+					params.cameraFreeSun = false;
+					params.cameraFreeEarth = true;
+					params.cameraFreeMoon = false;
+				}
+				if(radioID == "radio8c") {
+					params.cameraFreeSun = false;
+					params.cameraFreeEarth = false;
+					params.cameraFreeMoon = true;
+				}
+			});			
+			}
+			
+			{//radio buttons (Presets) 
+			$( "#radioPresets" ).buttonset();
+			
+			$('#radioPresets input').on('change', function() {
+				var radioID = $('input[name="radio9options"]:checked')[0].id;
+
+				if(radioID == "radio9a") {/* manual preset */
+					params.presetTrue = false;
+					
+					{//Set parameters
+					$('#radio8a').trigger('click');//Sun as View Center
+					}
+					
+					{//Unlock options - return everything to "manual"
+					$('#sliderEarthPosition').slider({ disabled: false });//Earth Position
+					$('#sliderEarthVelocity').slider({ disabled: false });//Earth Velocity
+					$('#sliderMoonPosition').slider({ disabled: false });//Moon Position
+					$('#sliderMoonVelocity').slider({ disabled: false });//Moon Velocity
+					$('#sliderMoonOrbitInclination').slider({ disabled: false });//Moon Orbit Inclination
+					$('#sliderMoonEarthDistance').slider({ disabled: false });//Moon Earth Distance
+// 					$('#radio2').button("refresh");
+					$('#radio').buttonset({ disabled: false });//Small Screen
+					$('#radioViewCenter').buttonset({ disabled: false });//View Center
+					
+					//color back to normal
+					document.getElementById("amountEarthPosition").style.background = "rgba(128,128,128,0.0)";//Earth Position
+					document.getElementById("amountEarthVelocity").style.background = "rgba(128,128,128,0.0)";//Earth Velocity
+					document.getElementById("amountMoonPosition").style.background = "rgba(128,128,128,0.0)";//Moon Position
+					document.getElementById("amountMoonVelocity").style.background = "rgba(128,128,128,0.0)";//Moon Velocity
+					document.getElementById("amountMoonOrbitInclination").style.background = "rgba(128,128,128,0.0)";//Moon Orbit Inclination
+					document.getElementById("amountMoonEarthDistance").style.background = "rgba(128,128,128,0.0)";//Moon Earth Distance
+					document.getElementById("radio").style.background = "rgba(128,128,128,0.0)";//Small Screen
+					document.getElementById("radioViewCenter").style.background = "rgba(128,128,128,0.0)";//View Center
+					}
+				}
+				if(radioID == "radio9b") {/* moon phases preset */
+					params.presetTrue = true;//this parameter set always starts where it left off
+					
+					{//Set parameters
+					//Earth
+					params.rotationEarthSun = 3;
+					params.rotationEarthEigen = params.rotationEarthSun * 365;
+					//Moon
+					params.rotationMoonEarth = params.rotationEarthSun * 12;
+					params.rotationMoonEigen = params.rotationMoonEarth;
+					//should somehow make sure that the moon always faces earth here (it does but rotates between click instances) - restart position every time
+					rotation_speed_e = 0.0;
+					rotation_speed_ee = 0.0;
+					rotation_speed_m = 0.0;
+					rotation_speed_me = 0.0; 
+					
+					//set Earth Moon Distance to 95    
+					e.scaleX10 = 95;
+					$('#sliderMoonEarthDistance').slider('value', e.scaleX10 );
+// 					$('#amountMoonEarthDistance').val( $( '#sliderMoonEarthDistance' ).slider( "value" ) + "   Moon Earth Distance");
+					$('#amountMoonEarthDistance').val( moon_earth_distance );	
+// 					updateMoonDist(distance);	
+					updateOrbits(e.scaleX10);
+					
+					$('#radio1').trigger('click');//Moon from Earth //Small Screen Preset
+					$('#radio5b').trigger('click');//Earth Orbit Off{//choose some options that give a better small screen view, but remain unlocked
+					$('#radioViewCenter').buttonset({ disabled: false });$('#radio8a').trigger('click');//View Center (in case it is locked from previous preset)//View Center Preset
+					}
+
+					{//Unlock options that could remain locked through previous choices (before locking options)
+					$('#sliderMoonOrbitInclination').slider({ disabled: false });//Moon Orbit Inclination
+					document.getElementById("amountMoonOrbitInclination").style.background = "rgba(28,128,128,0.0)";//Moon Orbit Inclination	
+					}					
+					
+					{//Lock Out Options
+					$('#sliderEarthPosition').slider({ disabled: true });//Earth Position
+					$('#sliderEarthVelocity').slider({ disabled: true });//Earth Velocity
+					$('#sliderMoonPosition').slider({ disabled: true });//Moon Position
+					$('#sliderMoonVelocity').slider({ disabled: true });//Moon Velocity
+					$('#sliderMoonEarthDistance').slider({ disabled: true });//Moon Earth Distance
+					$('#radio').buttonset({ disabled: true });//Small Screen
+					$('#radioViewCenter').buttonset({ disabled: true });//View Center
+					
+					$('#radio').removeClass('ui-button-disabled ui-state-disabled');//to not dim the buttons 
+					$('#radioViewCenter').removeClass('ui-button-disabled ui-state-disabled');//to not dim the buttons 
+					
+					//color red
+					document.getElementById("amountEarthPosition").style.background = "rgba(256,128,128,0.5)";//Earth Position
+// 					document.getElementsByClassName("gui_overlord_slider").style.background = "rgba(256,128,128,0.5)";//Earth Position
+					document.getElementById("amountEarthVelocity").style.background = "rgba(256,128,128,0.5)";//Earth Velocity
+					document.getElementById("amountMoonPosition").style.background = "rgba(256,128,128,0.5)";//Moon Position
+					document.getElementById("amountMoonVelocity").style.background = "rgba(256,128,128,0.5)";//Moon Velocity
+					document.getElementById("amountMoonEarthDistance").style.background = "rgba(256,128,128,0.5)";//Moon Earth Distance
+					document.getElementById("radio").style.background = "rgba(256,128,128,0.5)";//Small Screen
+					document.getElementById("radioViewCenter").style.background = "rgba(256,128,128,0.5)";//View Center
+					}
+				}
+				if(radioID == "radio9c") {/* solar eclipse preset */
+					params.presetTrue = false;//will use other set of parameters than the one set for params.presetTrue = true
+					
+					{//Set parameters
+					//set Earth Position to 75
+					e.scaleX = 75;
+					$('#sliderEarthPosition').slider('value', e.scaleX );
+					$('#amountEarthPosition').val( earth_position);
+					
+					//set Earth Velocity to 0
+					e.scaleX3 = 0;
+					$('#sliderEarthVelocity').slider('value', e.scaleX3 );
+					$('#amountEarthVelocity').val( earth_velocity);
+					
+					//set Moon Position to 248
+					e.scaleX2 = 248;
+					$('#sliderMoonPosition').slider('value', e.scaleX2 );
+					$('#amountMoonPosition').val( moon_position);
+					
+					//set Moon Velocity to 0
+					e.scaleX7 = 0;
+					$('#sliderMoonVelocity').slider('value', e.scaleX7 );
+					$('#amountMoonVelocity').val( moon_velocity );
+					
+					//set Moon Orbit Inclination Slider to 45
+					e.scaleX9 = 45;
+					$('#sliderMoonOrbitInclination').slider('value', e.scaleX9 );
+					$('#amountMoonOrbitInclination').val( moon_orbit_inclination );
+					
+					//set Earth Moon Distance to 95 (needs to match for total eclipse)
+					e.scaleX10 = 95;
+					$('#sliderMoonEarthDistance').slider('value', e.scaleX10 );
+					$('#amountMoonEarthDistance').val( moon_earth_distance );
+					
+					
+					$('#radio5a').trigger('click');//Earth Orbit On
+					$('#radio6a').trigger('click');//Moon Orbit On
+					$('#radio1').trigger('click');//Moon from Earth //Small Screen Preset
+					$('#radioViewCenter').buttonset({ disabled: false });$('#radio8a').trigger('click');//Sun as View Center//View Center Preset (in case it is locked from previous preset)
+					}
+					
+					{//Unlock options that could remain locked through previous choices (before locking options)
+					$('#sliderMoonEarthDistance').slider({ disabled: false });//Moon Earth Distance
+					document.getElementById("amountMoonEarthDistance").style.background = "rgba(128,128,128,0.0)";//Moon Earth Distance
+					}
+					
+					{//Lock Out Options
+					$('#sliderEarthPosition').slider({ disabled: true });//Earth Position
+					$('#sliderEarthVelocity').slider({ disabled: true });//Earth Velocity
+					$('#sliderMoonPosition').slider({ disabled: true });//Moon Position
+					$('#sliderMoonVelocity').slider({ disabled: true });//Moon Velocity
+					$('#sliderMoonOrbitInclination').slider({ disabled: true });//Moon Orbit Inclination
+// 					$('#sliderMoonEarthDistance').slider({ disabled: true });//Moon Earth Distance
+					$('#radio').buttonset({ disabled: true });//Small Screen
+					$('#radioViewCenter').buttonset({ disabled: true });//View Center
+					
+					//do nor dim radio buttons
+					$('#radio').removeClass('ui-button-disabled ui-state-disabled');//to not dim the buttons 
+					$('#radioViewCenter').removeClass('ui-button-disabled ui-state-disabled');//to not dim the buttons 
+					
+					//color red
+					document.getElementById("amountEarthPosition").style.background = "rgba(256,128,128,0.5)";//Earth Position
+					document.getElementById("amountEarthVelocity").style.background = "rgba(256,128,128,0.5)";//Earth Velocity
+					document.getElementById("amountMoonPosition").style.background = "rgba(256,128,128,0.5)";//Moon Position
+					document.getElementById("amountMoonVelocity").style.background = "rgba(256,128,128,0.5)";//Moon Velocity
+					document.getElementById("amountMoonOrbitInclination").style.background = "rgba(256,128,128,0.5)";//Moon Orbit Inclination
+// 					document.getElementById("amountMoonEarthDistance").style.background = "rgba(256,128,128,0.5)";//Moon Earth Distance
+					document.getElementById("radio").style.background = "rgba(256,128,128,0.5)";//Small Screen
+					document.getElementById("radioViewCenter").style.background = "rgba(256,128,128,0.5)";//View Center
+					}
+				}
+			});
+			}
+			
+			
+			{//on load
+			{//Earth Season Labels
+			//default state is to have the blocked location
+			//have to start with labels on and then "click the off"
+			$('#radioLocation').buttonset({ disabled: true });//Location
+// 			$('#radioLocation').removeClass('ui-button-disabled ui-state-disabled');//to not dim the buttons 
+// 			document.getElementById("radioLocation").style.background = "rgba(256,128,128,0.5)";//Earth Position
+// 			$('#radio4b').trigger('click');//labels off (the oposite has to be set in the divElement)
+			}
+			
+			{//slider handle image color -> Moon Velocity, Moon Eigen Axis Position, Velocity slider handle color change depending on what depends on what
+// 			if(params.moonFacesEarth == true){
+// 				//Moon Velocity controls Moon Eigen Axes Velocity
+// 				$("#sliderMoonVelocity .ui-slider-handle").attr('style','background:url(Images/Icons/icon_blue_slider2.png) no-repeat !important;width: 40px;height: 40px;background-size: 40px 40px !important;border: none;outline: none;margin-top: -10px;margin-left: -20px;');
+// 				//Moon Eigen Axes Velocity is controled by Moon Velocity
+// 				$("#sliderMoonEigen2 .ui-slider-handle").attr('style','background:url(Images/Icons/icon_blue_slider3.png) no-repeat !important;width: 40px;height: 40px;background-size: 40px 40px !important;border: none;outline: none;margin-top: -10px;margin-left: -20px;');
+// 				
+// 				//Moon Position controls Moon Eigen Axes Position
+// 				$("#sliderMoonPosition .ui-slider-handle").attr('style','background:url(Images/Icons/icon_blue_slider2.png) no-repeat !important;width: 40px;height: 40px;background-size: 40px 40px !important;border: none;outline: none;margin-top: -10px;margin-left: -20px;');
+// 				//Moon Eigen Axes Position is controled by Moon Position
+// 				$("#sliderMoonEigen .ui-slider-handle").attr('style','background:url(Images/Icons/icon_blue_slider3.png) no-repeat !important;width: 40px;height: 40px;background-size: 40px 40px !important;border: none;outline: none;margin-top: -10px;margin-left: -20px;');	
+// 			}
+			}
+			}//on load
+		});
+		</script>
+	
+		<script>//radio button images
+			$('div[id="radio"] label[for="radio1"]').html("<img src=\""+image_view_earth_moon+"\" width='"+radio_button_WH+"px' height="+radio_button_WH+"px'></img>");
+			$('div[id="radio"] label[for="radio4"]').html("<img src=\""+image_view_moon_earth+"\"  width='"+radio_button_WH+"px' height="+radio_button_WH+"px'></img>");
+			$('div[id="radio"] label[for="radio2"]').html("<img src=\""+image_view_earth_side+"\"  width='"+radio_button_WH+"px' height="+radio_button_WH+"px'></img>");
+			$('div[id="radio"] label[for="radio3"]').html("<img src=\""+image_view_sun_earth+"\" width='"+radio_button_WH+"px' height="+radio_button_WH+"px'></img>");
+// 			$('div[id="radio"] label[for="radio5"]').html("<img src=\""+image_view_earth_space+"\"  width='"+radio_button_WH+"px' height="+radio_button_WH+"px'></img>");
+// 			$('div[id="radio"] label[for="radio6"]').html("<img src=\""+image_view_moon_earth2+"\" width='"+radio_button_WH+"px' height="+radio_button_WH+"px'></img>");
+// 			$('div[id="radio"] label[for="radio7"]').html("<img src=\""+image_view_earth_moon2+"\" width='"+radio_button_WH+"px' height="+radio_button_WH+"px'></img>");
+			
+			$('div[id="radioViewCenter"] label[for="radio8a"]').html("<img src=\""+image_center_sun+"\" width='"+radio_button_WH+"px' height="+radio_button_WH+"px'></img>");
+			$('div[id="radioViewCenter"] label[for="radio8b"]').html("<img src=\""+image_center_earth+"\" width='"+radio_button_WH+"px' height="+radio_button_WH+"px'></img>");
+			$('div[id="radioViewCenter"] label[for="radio8c"]').html("<img src=\""+image_center_moon+"\" width='"+radio_button_WH+"px' height="+radio_button_WH+"px'></img>");
+			
+			$('div[id="radioPresets"] label[for="radio9a"]').html("<img src=\""+image_preset_manual+"\" width='"+radio_button_WH+"px' height="+radio_button_WH+"px'></img>");
+			$('div[id="radioPresets"] label[for="radio9b"]').html("<img src=\""+image_preset_phases+"\"  width='"+radio_button_WH+"px' height="+radio_button_WH+"px'></img>");
+			$('div[id="radioPresets"] label[for="radio9c"]').html("<img src=\""+image_preset_eclipse+"\"  width='"+radio_button_WH+"px' height="+radio_button_WH+"px'></img>");
+		</script>	
+
+		<script>//draggable divElement (mouse) - not used
+			var selected = null; // Object of the element to be moved
+			var x_pos = 0, y_pos = 0; // Stores x & y coordinates of the mouse pointer
+			var x_elem = 0, y_elem = 0; // Stores top, left values (edge) of the element
+			
+			function _drag_init(elem) { // Will be called when user starts dragging an element
+				// Store the object of the element which needs to be moved
+				selected = elem;
+				x_elem = x_pos - selected.offsetLeft;
+				y_elem = y_pos - selected.offsetTop;
+			}
+			function _move_elem(e) { // Will be called when user dragging an element
+				x_pos = document.all ? window.event.clientX : e.pageX;
+				y_pos = document.all ? window.event.clientY : e.pageY;
+				if (selected !== null) {
+					selected.style.left = (x_pos - x_elem) + 'px';
+					selected.style.top = (y_pos - y_elem) + 'px';
+				}
+			}
+			function _destroy() { // Destroy the object when we are done
+				selected = null;
+			}
+
+// 			// Bind the functions...
+// 			document.getElementById('circleEarth').onmousedown = function () {
+// 				_drag_init(this);
+// 				return false;
+// 			};
+// 
+// // 			document.onmousemove = _move_elem;
+// // 			document.onmouseup = _destroy;		
+// 			
+// 			document.getElementById('circleMoon').onmousedown = function () {
+// 				_drag_init(this);
+// 				return false;
+// 			};
+// 
+// 			document.onmousemove = _move_elem;
+// 			document.onmouseup = _destroy;
+		</script>
+		
+ 		<div id="resetButton"></div>
+		<div id="languageButton"></div>
+		<div id="dialogHelp" title="Dialog" align="center" ></div>	
+		<div id="infoButton"></div>			
+		<script>//standard buttons (don't forget:
+			//* the images (4x icons, 2x help/info screens), 
+			//* css elements (.helper, #dialogHelp), 
+			//* adjust with the other URL parameters (in #languageButton),
+			//* need customHeight, customWidth (customWidth = getWindowDimensions().width;) ; (also uses controls - can be commented out if not there)
+			//)
+			
+			function getUrlVars() {
+				var vars = {};
+				var parts = window.location.href.replace(/[?&]+([^=&]+)=([^&]*)/gi,    
+					function(m,key,value) {
+						vars[key] = value;
+					}
+				);
+				return vars;
+			}	
+			function AddDialog(elementName, content){//needs .helper class
+				$(elementName).empty();
+				
+				//vertical alignment of the image within a div
+				var content2 = "<span class='helper'></span>";
+				$(content2).appendTo(elementName);
+				
+				$(content).appendTo(elementName);
+				$(elementName).dialog("open");
+			}
+			
+			{///parameters (using customHeight, customWidth)
+			//button positioning
+			var standard1_left = 2;
+			var standard2_left = 102;//1554;
+			var standard3_left = 202;
+			var standard_bottom = 12;
+			
+			//dialog parameters
+			var dialog_height = customHeight;
+			var dialog_width = customWidth-4;
+			var dialog_left = 0;
+			var dialog_up = 0;			
+			}
+			{//load images
+			var button_reset = "Images/Icons/icon_blue_reload.png";
+			var button_info = "Images/Icons/icon_blue_help.png";
+			var button_language = "Images/Icons/icon_blue_DE.svg";				
+			var lang = "en";			
+			
+			//language button image //change icon image (offer opposite image)
+			if(getUrlVars()["lang"] == "en") button_language = "Images/Icons/icon_blue_DE.svg";
+			if(getUrlVars()["lang"] == "de") button_language = "Images/Icons/icon_blue_EN.svg";	
+			
+			//help screen images
+			var info_imageEN ='Images/0206_eclipses_moon_phases_help_screens_ES_interactives_EN.png';
+			var info_imageDE ='Images/0206_eclipses_moon_phases_help_screens_ES_interactives_DE.png';	
+			var info_image_width = 1500;
+			}			
+
+			$(function() 
+			{
+				{//reset button
+				$("#resetButton")
+				.text("") // sets text to empty
+				.css(
+					{ "z-index":"2",
+					"background":"rgba(0,0,0,0)", "opacity":"0.9", 
+					"position":"absolute", "bottom":standard_bottom+"px", "left":standard1_left+"px", 
+					"border": "none"
+					}) // adds CSS
+				.append("<img width='80' height='80' src="+button_reset+" />")
+				.button()
+				.click( 
+					function() { 
+						window.location.reload(true);
+					});
+				}
+				
+				{//language change button (adjust to other URL parameters!)
+				$("#languageButton")
+				.text("") // sets text to empty
+				.css(
+					{ "z-index":"2",
+					"background":"rgba(0,0,0,0)", "opacity":"0.9", 
+					"position":"absolute", "bottom":standard_bottom+"px", "left":standard2_left+"px", 
+					"border": "none"
+					}) // adds CSS
+				.append("<img width='80' height='80' src="+button_language+" />")
+				.button()
+				.click( 
+					function() { 
+						//reload with different url parameter (change language)
+						if(getUrlVars()["lang"] == "en") lang="de";
+						if(getUrlVars()["lang"] == "de") lang="en";
+						if(!getUrlVars()["lang"]) lang="de";//had default values (en as default)
+
+						//no grid parameter
+						window.location.href = window.location.pathname+"?lang="+lang;
+					});
+				}
+				
+				{//info/help dialog - needs CSS setup and dialog parameters
+				$("#dialogHelp").dialog({
+					autoOpen: false,
+					modal: false,
+					dialogClass: "dlg-no-title",
+					resizable: false,
+					height: dialog_height,
+					width: dialog_width,
+ 					position: [dialog_left,dialog_up],//left, top
+					clickOutside: true, // clicking outside the dialog will close it
+					clickOutsideTrigger: "#infoButton"  // Element (id or class) that triggers the dialog opening 
+				})
+				.mouseenter(function(){
+					controls.noRotate = true;
+				})
+				.mouseleave(function(){
+					controls.noRotate = false;
+				})
+				.click( 
+					function() { 
+						$("#dialogHelp").dialog("close");//close dialog
+					});	
+				}
+				
+				{//info/help button - needs #dialogHelp and AddDialog() function
+				$("#infoButton")
+				.text("") // sets text to empty
+				.css(
+					{ "z-index":"2",
+					"background":"rgba(0,0,0,0)", "opacity":"0.9", 
+					"position":"absolute", "bottom":standard_bottom+"px", "left":standard3_left+"px", 
+					"border": "none"
+					}) // adds CSS
+				.append("<img width='80' height='80' src="+button_info+" />")
+				.button()
+				.click( 
+					function() { 
+						if(getUrlVars()["lang"] == "en") AddDialog("#dialogHelp", "<img src="+info_imageEN+" width="+info_image_width+" style='vertical-align:middle;'></img>");
+						if(getUrlVars()["lang"] == "de") AddDialog("#dialogHelp", "<img src="+info_imageDE+" width="+info_image_width+" style='vertical-align:middle;'></img>");
+						if(!getUrlVars()["lang"]) AddDialog("#dialogHelp", "<img src="+info_imageEN+" width="+info_image_width+" style='vertical-align:middle;'></img>");//had default values (en as default)
+					});
+				}
+			});
+		</script>
+	</body>
+</html>
