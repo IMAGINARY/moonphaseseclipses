@@ -1,5 +1,5 @@
 mkfile_path := $(abspath $(lastword $(MAKEFILE_LIST)))
-IMAGE_VERSION ?= v1.0
+IMAGE_VERSION ?= v1.1
 
 # site-specific settings
 include ../0000_general/Hilbert/Makefile-local.inc
