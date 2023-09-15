@@ -2030,6 +2030,10 @@
 			];//view
 			}
 			{//load images
+
+			// ensure images can be loaded cross origin (e.g. for serving the app statically through certain CDNs)
+			THREE.ImageUtils.crossOrigin = '';
+
 			var texture_starfield = THREE.ImageUtils.loadTexture( 'Images/Milky2k_flipped.jpg');////flipped (correctly oriented in the code)
 			
 			var texture_shader_star1 =  THREE.ImageUtils.loadTexture( "Images/tex_cloud.png" );
