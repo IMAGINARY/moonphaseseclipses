@@ -588,7 +588,7 @@
 					
 					Earth = createPlanet( params.distanceEarthSun , params.sizeEarth , material_Earth);
 					Earth.rotation.y = tempEarthRotation;//remembering the "old" position (rotation around eigen axis)
-					Earth.castShadow = false;
+					Earth.castShadow = true;
 					Earth.receiveShadow = true;
 					
 					Earth_pivot.add( Earth );
@@ -651,7 +651,7 @@
 					MoonThe = createPlanetShiftTexture( params.distanceMoonEarth, params.sizeMoon, material_Moon );
 					MoonThe.rotation.y = tempMoonRotation;//remembering the "old" position (rotation around eigen axis)
 // 					MoonThe.rotation.z = obliquityMoon;//moon obliquity 6.7
-					MoonThe.receiveShadow = false;
+					MoonThe.receiveShadow = true;
 					MoonThe.castShadow = true;
 										
 					Moon_Pivot.add(MoonThe);
