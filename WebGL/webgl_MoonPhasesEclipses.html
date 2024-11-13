@@ -1068,7 +1068,7 @@
 				{//Earth
 				Earth = new THREE.Mesh( new THREE.SphereGeometry( params.sizeEarth, 32, 32 ), material_Earth );
 // 				Earth.position.x = params.distanceEarthSun;				
-				Earth.castShadow = false;//not to cast shadow on the Moon
+				Earth.castShadow = true; //do cast shadow on the Moon
 				Earth.receiveShadow = true;	
 
 				earth_Heat =  new THREE.Mesh( new THREE.SphereGeometry( params.sizeEarth + 0.6, 32, 32, 3.*Math.PI/2), material_Earth_Heat );//need to start the texture later//not adding it to Earth_pivot -> so no rotations
@@ -1092,7 +1092,7 @@
 				MoonThe = createPlanetShiftTexture( params.distanceMoonEarth, params.sizeMoon, material_Moon );
 // 				MoonThe.rotation.z = obliquityMoon;//moon obliquity 6.7
 				
-				MoonThe.receiveShadow = false;//not to recieve shadow from the Earth
+				MoonThe.receiveShadow = true; //do receive shadow from the Earth
 				MoonThe.castShadow = true;
 
 				MoonAxis = new THREE.Mesh(new THREE.CylinderGeometry( 1, 1, 100, 32, 32 ), moon_axis_material);
